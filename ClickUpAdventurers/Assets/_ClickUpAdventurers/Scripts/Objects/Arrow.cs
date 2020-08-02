@@ -6,9 +6,17 @@ namespace ClickUpAdventurers
 {
     public class Arrow : RangedAttackObject
     {
+        public int damage = 1;
+
         private void OnTriggerEnter(Collider other)
         {
-            Debug.Log(other.gameObject.name);
+            if(other.tag == "Enemy")
+            {
+                //If we collided with an enemy then damage him and destroy the arrow
+                EnemyCharacter enemy = other.gameObject.GetComponent<EnemyCharacter>();
+                enemy.TakeDamage(damage);
+                Destroy(gameObject);
+            }
         }
     }
 }

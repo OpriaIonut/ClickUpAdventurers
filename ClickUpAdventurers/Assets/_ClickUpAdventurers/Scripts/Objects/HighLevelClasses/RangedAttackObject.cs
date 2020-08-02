@@ -6,7 +6,7 @@ namespace ClickUpAdventurers
 {
     public class RangedAttackObject : MonoBehaviour
     {
-        public float deathTime = 5.0f;
+        public float deathTime = 5.0f;          //Kill object after certain time
         public float movementSpeed = 10.0f;
         private Rigidbody rb;
 

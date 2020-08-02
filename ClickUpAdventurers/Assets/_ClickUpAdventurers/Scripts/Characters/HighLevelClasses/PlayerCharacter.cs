@@ -6,11 +6,12 @@ namespace ClickUpAdventurers
 {
     public abstract class PlayerCharacter : Character
     {
-        protected float begunTouchTime;
-        protected float endTouchTime;
-        protected bool holdingTouch = false;
+        protected float begunTouchTime;         //Set when we tap the screen
+        protected float endTouchTime;           //Set when we take the finger off the screen
+        protected bool holdingTouch = false;    //Set to true while we hold the touch
 
-        protected Touch currentTouch;
+        protected Touch currentTouch;           //The current touch that we will use for logistics
+        protected BattleManager battleManager;  //Reference to the battle manager so we can stop logic when the game has ended
 
         public override void InheritedAwakeCalls()
         {
@@ -19,12 +20,15 @@ namespace ClickUpAdventurers
 
         public override void InheritedStartCalls()
         {
-            throw new System.NotImplementedException();
+            battleManager = BattleManager.instance;
         }
 
         public override void InheritedUpdateCalls()
         {
-            CheckInput();
+            if (!battleManager.GameHasEnded)
+            {
+                CheckInput();
+            }
         }
 
         private void CheckInput()
