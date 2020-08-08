@@ -11,18 +11,26 @@ namespace ClickUpAdventurers
         public int damage = 1;
         public float attackCooldown = 1.0f;
 
+        public GameObject lootPrefab;
+
+        [HideInInspector] public Vector3 targetPos = Vector3.zero;
+        private Vector3 targetPosBackup;
+
         private float lastAttackTime;
 
         private Rigidbody rb;
+        private Looter looter;
         private Warrior collidedWarrior;    //The warrior that we collided with, used to stop movement and other logic
 
         private BattleManager battleManager;
+
+        private bool damageLooter = false;
 
         private void Start()
         {
             battleManager = BattleManager.instance;
             rb = GetComponent<Rigidbody>();
-
+            looter = Resources.FindObjectsOfTypeAll<Looter>()[0];
             lastAttackTime = Time.time;
         }
 
@@ -35,6 +43,22 @@ namespace ClickUpAdventurers
                 {
                     collidedWarrior.TakeDamage(damage);
                     lastAttackTime = Time.time;
+                }
+                if(damageLooter && Time.time - lastAttackTime > attackCooldown)
+                {
+                    looter.TakeDamage(damage);
+                    lastAttackTime = Time.time;
+                }
+
+                bool locationCond = (looter.transform.position.x > 0 && transform.position.x > 0) || (looter.transform.position.x < 0 && transform.position.x < 0);
+
+                if (looter.gameObject.activeSelf && (looter.gatherLoot || looter.returnToParty) && locationCond)
+                {
+                    targetPos = looter.transform.position;
+                }
+                else
+                {
+                    targetPos = targetPosBackup;
                 }
             }
             else
@@ -51,11 +75,25 @@ namespace ClickUpAdventurers
                 if (collidedWarrior == null)
                 {
                     //If the game hasn't ended and we haven't collided with a warrior then move the enemy towards it's goal. At the moment the goal is at the origin, and we are using Vector3.up so that they stay on the same level as the players
-                    Vector3 targetPos = Vector3.up - transform.position;
-                    transform.LookAt(Vector3.up);
-                    rb.velocity = targetPos.normalized * speed * Time.fixedDeltaTime;
+                    Vector3 direction = targetPos - transform.position;
+
+                    Vector3 lookPos = targetPos - transform.position;
+                    lookPos.y = 0;
+                    transform.rotation = Quaternion.LookRotation(lookPos);
+                    rb.velocity = direction.normalized * speed * Time.fixedDeltaTime;
                 }
             }
+        }
+
+        public void SetTarget(Vector3 pos)
+        {
+            targetPos = pos;
+            targetPosBackup = pos;
+        }
+
+        private void DropLoot()
+        {
+            Instantiate(lootPrefab).transform.position = transform.position;
         }
 
         //Called by other scripts (like the arrow)
@@ -63,7 +101,10 @@ namespace ClickUpAdventurers
         {
             health -= ammount;
             if (health <= 0)
+            {
+                DropLoot();
                 Destroy(gameObject);
+            }
         }
 
         private void OnTriggerEnter(Collider other)
@@ -74,6 +115,21 @@ namespace ClickUpAdventurers
                 collidedWarrior = other.transform.root.GetComponent<Warrior>();
                 if(collidedWarrior != null)
                     rb.velocity = Vector3.zero; //If it is, then stop all movement
+                else
+                {
+                    if(other.transform.root.GetComponent<Looter>())
+                    {
+                        damageLooter = true;
+                    }
+                }
+            }
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.transform.root.GetComponent<Looter>())
+            {
+                damageLooter = false;
             }
         }
 

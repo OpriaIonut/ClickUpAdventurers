@@ -26,6 +26,7 @@ namespace ClickUpAdventurers
 
             Transform clone = Instantiate(enemyToSpawn, transform).transform;
             clone.position = targetPos;
+            clone.GetComponent<EnemyCharacter>().SetTarget(playerPos.position);
         }
     }
 }

@@ -22,14 +22,14 @@ namespace ClickUpAdventurers
 
         private void Start()
         {
-            InheritedStartCalls();
+            base.InheritedStartCalls();
 
             lastAttackTime = 0;
         }
 
         private void Update()
         {
-            InheritedUpdateCalls();
+            base.InheritedUpdateCalls();
 
             if(holdingTouch && Time.time - lastAttackTime > shootCooldownTime)
             {
@@ -38,15 +38,6 @@ namespace ClickUpAdventurers
         }
 
         #region Own Methods
-
-        private void OnTriggerEnter(Collider other)
-        {
-            if(other.tag == "Enemy")
-            {
-                //If an enemy touched the player, then end the game
-                BattleManager.instance.EndGame();
-            }
-        }
 
         private void DrawAccuracy()
         {
@@ -106,14 +97,7 @@ namespace ClickUpAdventurers
         //Rotate towards the position of the touch
         public override void RotateTowardsTouchPos()
         {
-            Vector3 touch = currentTouch.position;
-            //The touch is in screen space so we need to convert to world space
-            Vector3 worldTouch = Camera.main.ScreenToWorldPoint(new Vector3(touch.x, touch.y, Camera.main.nearClipPlane + 5.0f));
-            //Get vector from the position to the touch position
-            Vector3 lookPos = worldTouch - transform.position;
-            lookPos.y = 0;
-            //Rotate the object
-            transform.rotation = Quaternion.LookRotation(lookPos);
+            base.RotateTowardsTouchPos();
         }
 
         #endregion

@@ -127,3 +127,5 @@ MonoBehaviour:
   speed: 50
   damage: 1
   attackCooldown: 1
+  lootPrefab: {fileID: 3332640558711528005, guid: c34af12c573af0a4ebb574c0f2464b9e,
+    type: 3}

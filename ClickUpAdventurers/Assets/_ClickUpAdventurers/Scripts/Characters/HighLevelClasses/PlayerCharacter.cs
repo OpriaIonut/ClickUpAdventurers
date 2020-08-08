@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace ClickUpAdventurers
 {
@@ -12,6 +13,8 @@ namespace ClickUpAdventurers
 
         protected Touch currentTouch;           //The current touch that we will use for logistics
         protected BattleManager battleManager;  //Reference to the battle manager so we can stop logic when the game has ended
+
+        [HideInInspector] public bool isSelected;
 
         public override void InheritedAwakeCalls()
         {
@@ -31,32 +34,52 @@ namespace ClickUpAdventurers
             }
         }
 
+        private bool clickedUI;
         private void CheckInput()
         {
             if (Input.touchCount > 0)
             {
                 currentTouch = Input.GetTouch(0);
-                if(currentTouch.phase == TouchPhase.Began)
+                //Check if the current player is the selected one and we haven't clicked on an ui element
+                if (isSelected && EventSystem.current.IsPointerOverGameObject(currentTouch.fingerId) == false)
                 {
-                    RotateTowardsTouchPos();
-                    begunTouchTime = Time.time;
-                    holdingTouch = true;
-                }
-                else if(currentTouch.phase == TouchPhase.Moved)
-                {
-                    RotateTowardsTouchPos();
-                }
-                else if (currentTouch.phase == TouchPhase.Ended)
-                {
-                    Attack();
-                    endTouchTime = Time.time;
-                    holdingTouch = false;
+                    if (currentTouch.phase == TouchPhase.Began)
+                    {
+                        RotateTowardsTouchPos();
+                        begunTouchTime = Time.time;
+                        holdingTouch = true;
+                    }
+                    else if (currentTouch.phase == TouchPhase.Moved)
+                    {
+                        RotateTowardsTouchPos();
+                    }
+                    else if (currentTouch.phase == TouchPhase.Ended && holdingTouch)
+                    {
+                        Attack();
+                        endTouchTime = Time.time;
+                        holdingTouch = false;
+                    }
                 }
             }
         }
 
         public abstract void Attack();
 
-        public abstract void RotateTowardsTouchPos();
+        public virtual void ChangeBasePosition(Vector3 position)
+        {
+            transform.position = position;
+        }
+
+        public virtual void RotateTowardsTouchPos()
+        {
+            Vector3 touch = currentTouch.position;
+            //The touch is in screen space so we need to convert to world space
+            Vector3 worldTouch = Camera.main.ScreenToWorldPoint(new Vector3(touch.x, touch.y, Camera.main.nearClipPlane + 5.0f));
+            //Get vector from the position to the touch position
+            Vector3 lookPos = worldTouch - transform.position;
+            lookPos.y = 0;
+            //Rotate the object
+            transform.rotation = Quaternion.LookRotation(lookPos);
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.XR.WSA.Input;
 
 public class BattleManager : MonoBehaviour
 {
@@ -18,6 +19,8 @@ public class BattleManager : MonoBehaviour
     #endregion
 
     private bool gameHasEnded = false;
+    public int gatheredLoot = 0;
+
     public bool GameHasEnded
     {
         get { return gameHasEnded; }
