@@ -13,13 +13,14 @@ namespace ClickUpAdventurers
 
         public GameObject lootPrefab;
 
+        //The position towards which it moves. If the looter is away from the party, he will be the main target
         [HideInInspector] public Vector3 targetPos = Vector3.zero;
         private Vector3 targetPosBackup;
 
         private float lastAttackTime;
 
         private Rigidbody rb;
-        private Looter looter;
+        private Looter looter;              //Reference to the looter script to know when he is away from the party
         private Warrior collidedWarrior;    //The warrior that we collided with, used to stop movement and other logic
 
         private BattleManager battleManager;
@@ -36,7 +37,7 @@ namespace ClickUpAdventurers
 
         private void Update()
         {
-            if (!battleManager.GameHasEnded)
+            if (!battleManager.GameHasEnded && !battleManager.GamePaused)
             {
                 //If the game hasn't ended and we collided with an enemy then damage it at certain time intervals
                 if (collidedWarrior != null && Time.time - lastAttackTime > attackCooldown)
@@ -44,14 +45,17 @@ namespace ClickUpAdventurers
                     collidedWarrior.TakeDamage(damage);
                     lastAttackTime = Time.time;
                 }
+                //If we collided with the looter then attack him
                 if(damageLooter && Time.time - lastAttackTime > attackCooldown)
                 {
                     looter.TakeDamage(damage);
                     lastAttackTime = Time.time;
                 }
 
+                //We want only the enemies from the same side on the map that he gathers on to attack him
                 bool locationCond = (looter.transform.position.x > 0 && transform.position.x > 0) || (looter.transform.position.x < 0 && transform.position.x < 0);
 
+                //If the looter is alive and away from the party then move towards him
                 if (looter.gameObject.activeSelf && (looter.gatherLoot || looter.returnToParty) && locationCond)
                 {
                     targetPos = looter.transform.position;
@@ -70,9 +74,9 @@ namespace ClickUpAdventurers
 
         private void FixedUpdate()
         {
-            if (!battleManager.GameHasEnded)
+            if (!battleManager.GameHasEnded && !battleManager.GamePaused)
             {
-                if (collidedWarrior == null)
+                if (collidedWarrior == null || !collidedWarrior.gameObject.activeSelf)
                 {
                     //If the game hasn't ended and we haven't collided with a warrior then move the enemy towards it's goal. At the moment the goal is at the origin, and we are using Vector3.up so that they stay on the same level as the players
                     Vector3 direction = targetPos - transform.position;
@@ -117,6 +121,7 @@ namespace ClickUpAdventurers
                     rb.velocity = Vector3.zero; //If it is, then stop all movement
                 else
                 {
+                    //If we collided with the looter then start damaging him
                     if(other.transform.root.GetComponent<Looter>())
                     {
                         damageLooter = true;

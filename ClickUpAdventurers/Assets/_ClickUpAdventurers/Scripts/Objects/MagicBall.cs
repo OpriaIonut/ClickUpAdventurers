@@ -4,22 +4,19 @@ using UnityEngine;
 
 namespace ClickUpAdventurers
 {
-    public class Arrow : RangedAttackObject
+    public class MagicBall : RangedAttackObject
     {
         public int damage = 1;
 
-        bool collided = false;
         private void OnTriggerEnter(Collider other)
         {
-            if(other.tag == "Enemy" && collided == false)
+            if (other.tag == "Enemy")
             {
                 //If we collided with an enemy then damage him and destroy the arrow
                 EnemyCharacter enemy = other.gameObject.GetComponent<EnemyCharacter>();
                 enemy.TakeDamage(damage);
-                Destroy(gameObject);
-                //If two enemies are at the exact same position we can kill both at the same time
-                //So this bool is used to get rid of that possibility
-                collided = true;
+                //The purpose of the magic ball is that it is big and destroys all enemies it comes into contact with so we delay the destroy for a short while in order to kill all enemies it has collided with
+                Destroy(gameObject, 0.1f);
             }
         }
     }

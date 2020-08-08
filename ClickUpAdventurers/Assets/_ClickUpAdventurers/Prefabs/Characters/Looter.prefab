@@ -499,9 +499,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isSelected: 0
-  gatherTime: 5
+  gatherTime: 2
   capacity: 5
-  movementSpeed: 3
+  movementSpeed: 2
   health: 20
   healthbar: {fileID: 636831471}
   gatherLoot: 0

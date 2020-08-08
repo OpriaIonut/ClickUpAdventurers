@@ -125,11 +125,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ef126ed4f5cce04689ff1945ddce512, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectedCharacter: 0
+  isSelected: 0
   arrowPrefab: {fileID: 728146422159970727, guid: 7e41da44a63546247ab8dde89912e45b,
     type: 3}
   firePoint: {fileID: 220093105252414403}
-  accuracyMaxTime: 3
+  accuracyMaxTime: 1
   minAccuracyAngle: 30
   shootCooldownTime: 0.5
 --- !u!54 &1346980164

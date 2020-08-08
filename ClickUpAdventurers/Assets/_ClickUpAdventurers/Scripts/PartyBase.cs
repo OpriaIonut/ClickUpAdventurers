@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PartyBase : MonoBehaviour
+namespace ClickUpAdventurers
 {
-    private void OnTriggerEnter(Collider other)
+    public class PartyBase : MonoBehaviour
     {
-        if (other.tag == "Enemy")
+        private void OnTriggerEnter(Collider other)
         {
-            //If an enemy touched the player, then end the game
-            BattleManager.instance.EndGame();
+            if (other.tag == "Enemy")
+            {
+                //If an enemy touched the player, then end the game
+                BattleManager.instance.EndGame();
+            }
         }
     }
 }

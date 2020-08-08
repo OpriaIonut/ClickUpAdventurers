@@ -30,10 +30,12 @@ namespace ClickUpAdventurers
         private void Update()
         {
             base.InheritedUpdateCalls();
-
-            if(holdingTouch && Time.time - lastAttackTime > shootCooldownTime)
+            if (!BattleManager.instance.GamePaused)
             {
-                DrawAccuracy();
+                if (holdingTouch && Time.time - lastAttackTime > shootCooldownTime)
+                {
+                    DrawAccuracy();
+                }
             }
         }
 

@@ -19,18 +19,18 @@ public class CharacterChanger : MonoBehaviour
 
     #endregion
 
-    public List<PlayerCharacter> characters;
+    public List<PlayerCharacter> characters;    //The list of the characters that we can swap between
+    private Quaternion initRot; //Used to reset rotation on swap
 
-    [HideInInspector] public Vector3 availablePosition;
-    private Vector3[] positions;
-    private int[] indices;
+    private Vector3[] positions;    //The position where we can place the characters
+    private int[] indices;          //Indices used to permute the positioning of the characters
 
-    private int selectedIndex;
+    public bool canChange = true;   //Set by other scripts to block the character changing on certain events (like shooting something)
 
     private void Start()
     {
-        selectedIndex = 0;
-        characters[selectedIndex].isSelected = true;
+        characters[0].isSelected = true;
+        initRot = characters[0].transform.rotation;
 
         positions = new Vector3[characters.Count];
         indices = new int[characters.Count];
@@ -43,6 +43,10 @@ public class CharacterChanger : MonoBehaviour
 
     public void ChangeSelectedCharacter()
     {
+        if (!canChange)
+            return;
+
+        //Permute the indices vector in order to rotate the characters
         int retainer = indices[0];
         for(int index = 0; index < indices.Length; index++)
         {
@@ -53,11 +57,14 @@ public class CharacterChanger : MonoBehaviour
         }
         indices[indices.Length - 1] = retainer;
 
+        //Set their position and rotation
         for(int index = 0; index < characters.Count; index++)
         {
             characters[index].isSelected = false; 
             if (indices[index] == 0)
                 characters[index].isSelected = true;
-            characters[index].ChangeBasePosition(positions[indices[index]]);        }
+            //Setting the position and rotation is processed by the characters because in certain moments some of them may not want to change position (ex: looter is away from the party)
+            characters[index].ChangeBasePosition(positions[indices[index]], initRot);
+        }
     }
 }

@@ -18,15 +18,35 @@ public class BattleManager : MonoBehaviour
 
     #endregion
 
-    private bool gameHasEnded = false;
+    public GameObject endGameCanvas;
+    public GameObject gamePausedCanvas;
     public int gatheredLoot = 0;
 
+    #region Properties
+
+    private bool gamePaused = false;
+    public bool GamePaused
+    {
+        get { return gamePaused; }
+    }
+
+    private bool gameHasEnded = false;
     public bool GameHasEnded
     {
         get { return gameHasEnded; }
     }
 
-    public GameObject endGameCanvas;
+    //Returns the time the game was paused
+    public float PausedTimeDiff
+    {
+        get { return pausedTimeEnd - pausedTimeStart; }
+    }
+
+    #endregion
+
+    //Used to know how much time has passed while the game was paused
+    private float pausedTimeStart;
+    private float pausedTimeEnd;
 
     private void Start()
     {
@@ -45,5 +65,17 @@ public class BattleManager : MonoBehaviour
     {
         gameHasEnded = true;
         endGameCanvas.SetActive(true);
+    }
+
+    public void TogglePause()
+    {
+        gamePaused = !gamePaused;
+
+        if (gamePaused == true)
+            pausedTimeStart = Time.time;
+        else
+            pausedTimeEnd = Time.time;
+
+        gamePausedCanvas.SetActive(gamePaused);
     }
 }

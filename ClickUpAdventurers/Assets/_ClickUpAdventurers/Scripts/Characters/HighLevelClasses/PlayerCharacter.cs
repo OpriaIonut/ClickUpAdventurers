@@ -14,7 +14,7 @@ namespace ClickUpAdventurers
         protected Touch currentTouch;           //The current touch that we will use for logistics
         protected BattleManager battleManager;  //Reference to the battle manager so we can stop logic when the game has ended
 
-        [HideInInspector] public bool isSelected;
+        [HideInInspector] public bool isSelected;   //The current player is the one that attacks
 
         public override void InheritedAwakeCalls()
         {
@@ -28,12 +28,25 @@ namespace ClickUpAdventurers
 
         public override void InheritedUpdateCalls()
         {
-            if (!battleManager.GameHasEnded)
+            if (!battleManager.GameHasEnded && !battleManager.GamePaused)
             {
                 CheckInput();
             }
+
+            //If the game is paused then we want to add the paused time to our time variables (touch time)
+            if(battleManager.GamePaused)
+            {
+                resetValuesAfterPause = true;
+            }
+            else if(resetValuesAfterPause)
+            {
+                begunTouchTime += battleManager.PausedTimeDiff;
+                endTouchTime += battleManager.PausedTimeDiff;
+                resetValuesAfterPause = false;
+            }
         }
 
+        private bool resetValuesAfterPause = false;
         private bool clickedUI;
         private void CheckInput()
         {
@@ -44,7 +57,9 @@ namespace ClickUpAdventurers
                 if (isSelected && EventSystem.current.IsPointerOverGameObject(currentTouch.fingerId) == false)
                 {
                     if (currentTouch.phase == TouchPhase.Began)
-                    {
+                    { 
+                        //While we are holding the tap, don't allow the player to change character
+                        CharacterChanger.instance.canChange = false;
                         RotateTowardsTouchPos();
                         begunTouchTime = Time.time;
                         holdingTouch = true;
@@ -55,6 +70,8 @@ namespace ClickUpAdventurers
                     }
                     else if (currentTouch.phase == TouchPhase.Ended && holdingTouch)
                     {
+                        //We released the touch so now the player can change the character if he wants to
+                        CharacterChanger.instance.canChange = true;
                         Attack();
                         endTouchTime = Time.time;
                         holdingTouch = false;
@@ -65,9 +82,10 @@ namespace ClickUpAdventurers
 
         public abstract void Attack();
 
-        public virtual void ChangeBasePosition(Vector3 position)
+        public virtual void ChangeBasePosition(Vector3 position, Quaternion rot)
         {
             transform.position = position;
+            transform.rotation = rot;
         }
 
         public virtual void RotateTowardsTouchPos()
