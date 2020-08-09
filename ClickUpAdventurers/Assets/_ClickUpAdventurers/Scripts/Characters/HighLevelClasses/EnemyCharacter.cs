@@ -6,12 +6,9 @@ namespace ClickUpAdventurers
     [RequireComponent(typeof(Rigidbody))]
     public class EnemyCharacter : Character
     {
-        public int health = 1;
-        public float speed = 3;
-        public int damage = 1;
-        public float attackCooldown = 1.0f;
-
-        public GameObject lootPrefab;
+        //The template for the enemy that we will use. Contains status variables, like health, damage, etc.
+        public EnemyScriptableObj enemyTemplate;
+        private int m_health;
 
         //The position towards which it moves. If the looter is away from the party, he will be the main target
         [HideInInspector] public Vector3 targetPos = Vector3.zero;
@@ -33,6 +30,9 @@ namespace ClickUpAdventurers
             rb = GetComponent<Rigidbody>();
             looter = Resources.FindObjectsOfTypeAll<Looter>()[0];
             lastAttackTime = Time.time;
+
+            m_health = enemyTemplate.health;
+            gameObject.name = enemyTemplate.name;
         }
 
         private void Update()
@@ -40,15 +40,15 @@ namespace ClickUpAdventurers
             if (!battleManager.GameHasEnded && !battleManager.GamePaused)
             {
                 //If the game hasn't ended and we collided with an enemy then damage it at certain time intervals
-                if (collidedWarrior != null && Time.time - lastAttackTime > attackCooldown)
+                if (collidedWarrior != null && Time.time - lastAttackTime > enemyTemplate.attackCooldown)
                 {
-                    collidedWarrior.TakeDamage(damage);
+                    collidedWarrior.TakeDamage(enemyTemplate.damage);
                     lastAttackTime = Time.time;
                 }
                 //If we collided with the looter then attack him
-                if(damageLooter && Time.time - lastAttackTime > attackCooldown)
+                if(damageLooter && Time.time - lastAttackTime > enemyTemplate.attackCooldown)
                 {
-                    looter.TakeDamage(damage);
+                    looter.TakeDamage(enemyTemplate.damage);
                     lastAttackTime = Time.time;
                 }
 
@@ -84,7 +84,7 @@ namespace ClickUpAdventurers
                     Vector3 lookPos = targetPos - transform.position;
                     lookPos.y = 0;
                     transform.rotation = Quaternion.LookRotation(lookPos);
-                    rb.velocity = direction.normalized * speed * Time.fixedDeltaTime;
+                    rb.velocity = direction.normalized * enemyTemplate.speed * Time.fixedDeltaTime;
                 }
             }
         }
@@ -97,14 +97,14 @@ namespace ClickUpAdventurers
 
         private void DropLoot()
         {
-            Instantiate(lootPrefab).transform.position = transform.position;
+            Instantiate(enemyTemplate.lootPrefab).transform.position = transform.position;
         }
 
         //Called by other scripts (like the arrow)
         public void TakeDamage(int ammount)
         {
-            health -= ammount;
-            if (health <= 0)
+            m_health -= ammount;
+            if (m_health <= 0)
             {
                 DropLoot();
                 Destroy(gameObject);

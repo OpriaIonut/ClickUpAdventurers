@@ -123,9 +123,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f87fbaa4248ff5d47b2659cfcc7e75e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 1
-  speed: 50
-  damage: 1
-  attackCooldown: 1
-  lootPrefab: {fileID: 3332640558711528005, guid: c34af12c573af0a4ebb574c0f2464b9e,
-    type: 3}
+  enemyTemplate: {fileID: 11400000, guid: 1e10ed8cdf85ac242a36daabb687bf32, type: 2}
+  targetPos: {x: 0, y: 0, z: 0}

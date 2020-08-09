@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68818205031c6da449d9f29ea9a29d27, type: 3}
+  m_Name: Quest4
+  m_EditorClassIdentifier: 
+  questRank: 2
+  stars: 0
+  rewardMoney: 20
+  waves:
+  - {fileID: 11400000, guid: add8662a701ef994eb3d55d0ec6a2cb3, type: 2}
+  - {fileID: 11400000, guid: 0e5c968a4e5a1ba4b8cd55732868fba0, type: 2}
+  - {fileID: 11400000, guid: f8d0104f461c30a46aee7bf77866cdb7, type: 2}
+  title: Die motherfucker
+  description: Let's see you surpass this

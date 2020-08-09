@@ -6,6 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/_ClickUpAdventurers/Scenes/MainScene.unity
+    guid: c6289687ad8044d47ab08d9b178bfdc5
+  - enabled: 1
+    path: Assets/_ClickUpAdventurers/Scenes/QuestScene.unity
+    guid: de0639d506871354b8707e0ffea55bfd
+  - enabled: 1
     path: Assets/_ClickUpAdventurers/Scenes/BattleScene.unity
     guid: bcf040429cfc9b141b34b48562ad6e73
   m_configObjects: {}
