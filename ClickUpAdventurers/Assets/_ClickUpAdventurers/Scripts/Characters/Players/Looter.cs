@@ -117,7 +117,7 @@ namespace ClickUpAdventurers
         private void EndSearch()
         {
             //Add the loot to the stash and reset variables
-            BattleManager.instance.gatheredLoot += gatheredLoot;
+            BattleManager.instance.GatheredLoot += gatheredLoot;
             gatheredLoot = 0;
             returnToParty = false;
             transform.rotation = initRot;

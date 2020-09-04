@@ -13,10 +13,46 @@ namespace ClickUpAdventurers
 
         private QuestScriptableObj selectedQuest;   //The quest that the player has selected from the guild
 
+        private bool checkForEndGame = false;
+        private Looter looter;
+
         private void Start()
         {
+            looter = FindObjectOfType<Looter>();
             selectedQuest = SceneLoader.instance.selectedQuest;
             StartCoroutine(SpawnWaves());
+        }
+
+        private void Update()
+        {
+            if (checkForEndGame && CheckEndGame())
+            {
+                checkForEndGame = false;
+                BattleManager.instance.GameWon();
+            }
+        }
+
+        private bool CheckEndGame()
+        {
+            EnemyCharacter[] enemy = FindObjectsOfType<EnemyCharacter>();
+            Loot[] loot = FindObjectsOfType<Loot>();
+
+            if(enemy.Length == 0)
+            {
+                if(looter != null)
+                {
+                    //If there is no more loot and the looter is back with the party, then end the game
+                    if (loot.Length == 0 && looter.gatherLoot == false && looter.returnToParty == false)
+                        return true;
+                    return false;
+                }
+                else
+                {
+                    //Looter is dead so no need to wait for loot to dissapear
+                    return false;
+                }
+            }
+            return false;
         }
 
         private IEnumerator SpawnWaves()
@@ -58,6 +94,8 @@ namespace ClickUpAdventurers
 
                 yield return new WaitForSeconds(timeBetweenWaves);
             }
+
+            checkForEndGame = true;
         }
 
         private void SpawnEnemy(GameObject enemyToSpawn)

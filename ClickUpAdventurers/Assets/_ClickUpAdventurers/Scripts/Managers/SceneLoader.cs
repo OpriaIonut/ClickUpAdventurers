@@ -31,7 +31,7 @@ namespace ClickUpAdventurers
             SceneManager.LoadScene(sceneName);
         }
 
-        public void SaveData(QuestScriptableObj quest)
+        public void SaveQuest(QuestScriptableObj quest)
         {
             selectedQuest = quest;
         }

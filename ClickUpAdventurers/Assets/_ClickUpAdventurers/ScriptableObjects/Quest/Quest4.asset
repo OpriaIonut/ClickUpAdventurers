@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: Quest4
   m_EditorClassIdentifier: 
   questRank: 2
-  stars: 0
-  rewardMoney: 20
+  rewardMoney: 30
   waves:
   - {fileID: 11400000, guid: add8662a701ef994eb3d55d0ec6a2cb3, type: 2}
   - {fileID: 11400000, guid: 0e5c968a4e5a1ba4b8cd55732868fba0, type: 2}

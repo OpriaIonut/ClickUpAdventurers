@@ -62,6 +62,19 @@ namespace ClickUpAdventurers
                 clone.GetChild(1).GetComponent<TextMeshProUGUI>().text = quests[index].title;
                 clone.GetChild(2).GetComponent<TextMeshProUGUI>().text = "" + quests[index].rewardMoney + "$";
 
+                Transform child3 = clone.GetChild(3);
+                Transform child31 = clone.GetChild(3).GetChild(1);
+                Image[] stars = child31.GetComponentsInChildren<Image>();
+
+                int aquiredStars = DataRetainer.instance.GetQuestStars(quests[index].title);
+                for (int starIndex = 0; starIndex < stars.Length; starIndex++)
+                {
+                    if(starIndex < aquiredStars)
+                        stars[starIndex].gameObject.SetActive(true);
+                    else
+                        stars[starIndex].gameObject.SetActive(false);
+                }
+
                 //Add the quest to the list so we can enable/disable them when changing ranks
                 questListScript.questsByRank[(int)quests[index].questRank - 1].Add(clone.gameObject);
 

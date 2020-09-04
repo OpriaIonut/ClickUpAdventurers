@@ -47,7 +47,7 @@ namespace ClickUpAdventurers
 
         public void StartQuest()
         {
-            SceneLoader.instance.SaveData(selectedQuest);   //Save the current quest so we can spawn the proper enemies
+            SceneLoader.instance.SaveQuest(selectedQuest);   //Save the current quest so we can spawn the proper enemies
             SceneLoader.instance.LoadScene("BattleScene");
         }
     }

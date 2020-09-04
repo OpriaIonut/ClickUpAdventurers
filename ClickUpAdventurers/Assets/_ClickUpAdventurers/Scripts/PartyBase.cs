@@ -11,7 +11,7 @@ namespace ClickUpAdventurers
             if (other.tag == "Enemy")
             {
                 //If an enemy touched the player, then end the game
-                BattleManager.instance.EndGame();
+                BattleManager.instance.GameOver();
             }
         }
     }

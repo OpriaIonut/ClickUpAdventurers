@@ -27,7 +27,7 @@ namespace ClickUpAdventurers
             {
                 //If we don't have one, then load the main building
                 //The concept was made for the quest scene, in other scenes you may need to modify the code
-                SceneLoader.instance.LoadScene("MainBuilding");
+                SceneLoader.instance.LoadScene("MainScene");
             }
             else
             {

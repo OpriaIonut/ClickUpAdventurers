@@ -18,8 +18,7 @@ namespace ClickUpAdventurers
     public class QuestScriptableObj : ScriptableObject
     {
         public QuestRank questRank;
-        public int stars;
-        public float rewardMoney;
+        public int rewardMoney;
         public List<WaveScriptableObj> waves;
 
         public string title;
