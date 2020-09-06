@@ -7,7 +7,7 @@ namespace ClickUpAdventurers
     [CreateAssetMenu(fileName = "EnemyTemplate", menuName = "ScriptableObjects/EnemyScriptable")]
     public class EnemyScriptableObj : ScriptableObject
     {
-        public string name;
+        public string enemyName;
         public int health = 1;
         public float speed = 50;
         public int damage = 1;

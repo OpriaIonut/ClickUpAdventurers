@@ -11,6 +11,9 @@ namespace ClickUpAdventurers
         public Image healthbar1;
         public Image healthbar2;
 
+        public TextMeshProUGUI healthbarText1;
+        public TextMeshProUGUI healthbarText2;
+
         public TextMeshProUGUI moneyText;
 
         private DataRetainer dataRetainer;
@@ -25,6 +28,9 @@ namespace ClickUpAdventurers
         {
             healthbar1.rectTransform.localScale = new Vector3((float)dataRetainer.Warrior1HP / dataRetainer.warriorMaxHP, 1, 1);
             healthbar2.rectTransform.localScale = new Vector3((float)dataRetainer.Warrior2HP / dataRetainer.warriorMaxHP, 1, 1);
+
+            healthbarText1.text = "" + dataRetainer.Warrior1HP + " / " + dataRetainer.warriorMaxHP;
+            healthbarText2.text = "" + dataRetainer.Warrior2HP + " / " + dataRetainer.warriorMaxHP;
         }
     }
 }

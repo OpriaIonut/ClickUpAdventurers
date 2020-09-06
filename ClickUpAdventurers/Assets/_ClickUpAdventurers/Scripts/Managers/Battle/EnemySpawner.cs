@@ -15,11 +15,14 @@ namespace ClickUpAdventurers
 
         private bool checkForEndGame = false;
         private Looter looter;
+        private Warrior[] warriors;
 
         private void Start()
         {
             looter = FindObjectOfType<Looter>();
             selectedQuest = SceneLoader.instance.selectedQuest;
+
+            warriors = FindObjectsOfType<Warrior>();
             StartCoroutine(SpawnWaves());
         }
 
@@ -92,10 +95,18 @@ namespace ClickUpAdventurers
                     }
                 }
 
+                RecoverWarriorHp();
                 yield return new WaitForSeconds(timeBetweenWaves);
             }
 
             checkForEndGame = true;
+        }
+
+        private void RecoverWarriorHp()
+        {
+            for (int index = 0; index < warriors.Length; index++)
+                if (warriors[index] != null)
+                    warriors[index].Health += warriors[index].endWaveRecoveryAmmount;
         }
 
         private void SpawnEnemy(GameObject enemyToSpawn)

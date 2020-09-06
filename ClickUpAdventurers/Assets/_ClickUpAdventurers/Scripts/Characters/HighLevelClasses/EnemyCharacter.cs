@@ -32,7 +32,7 @@ namespace ClickUpAdventurers
             lastAttackTime = Time.time;
 
             m_health = enemyTemplate.health;
-            gameObject.name = enemyTemplate.name;
+            gameObject.name = enemyTemplate.enemyName;
         }
 
         private void Update()
@@ -117,12 +117,15 @@ namespace ClickUpAdventurers
             {
                 //If we collided with a player, check to see if it is a warrior
                 collidedWarrior = other.transform.root.GetComponent<Warrior>();
-                if(collidedWarrior != null)
+                if (collidedWarrior != null)
+                {
                     rb.velocity = Vector3.zero; //If it is, then stop all movement
+                    collidedWarrior.enemyContactList.Add(this);
+                }
                 else
                 {
                     //If we collided with the looter then start damaging him
-                    if(other.transform.root.GetComponent<Looter>())
+                    if (other.transform.root.GetComponent<Looter>())
                     {
                         damageLooter = true;
                     }

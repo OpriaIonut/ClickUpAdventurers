@@ -6,7 +6,7 @@ namespace ClickUpAdventurers
 {
     public class Loot : MonoBehaviour
     {
-        public MeshRenderer renderer;
+        public MeshRenderer gfxRenderer;
         public float destroyTime = 25.0f;
 
         private float startDestroyTime;
@@ -34,10 +34,10 @@ namespace ClickUpAdventurers
                     //This condition represents the seconds between which to enable/disable the renderer to simulate the animation
                     if ((currentTimeDiff >= -5 && currentTimeDiff <= -4) || (currentTimeDiff >= -3 && currentTimeDiff <= -2) || (currentTimeDiff >= -1 && currentTimeDiff <= 0))
                     {
-                        renderer.enabled = true;
+                        gfxRenderer.enabled = true;
                     }
                     else
-                        renderer.enabled = false;
+                        gfxRenderer.enabled = false;
                 }
                 if (currentTimeDiff >= 0)
                 {

@@ -10,6 +10,8 @@ namespace ClickUpAdventurers
         public GameObject magicBallPrefab;
         public Transform firePoint;
         public float castTime = 2.0f;   //The time it takes to fire the magic ball
+        public int damage;
+        public float ballSizeMultiplier = 1;
 
         public Image castTimeImage;
 
@@ -45,6 +47,8 @@ namespace ClickUpAdventurers
                         Transform clone = Instantiate(magicBallPrefab).transform;
                         clone.rotation = transform.rotation;
                         clone.position = firePoint.position;
+                        clone.GetComponent<MagicBall>().damage = damage;
+                        clone.localScale *= ballSizeMultiplier;
                         castTimeImage.transform.parent.gameObject.SetActive(false);
                         casting = false;
                         CharacterChanger.instance.canChange = true;

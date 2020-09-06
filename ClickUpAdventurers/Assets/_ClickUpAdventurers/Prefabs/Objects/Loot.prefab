@@ -75,7 +75,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b3128309806ccd4d8d8084de4036417, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  renderer: {fileID: 3332640559271079087}
+  gfxRenderer: {fileID: 3332640559271079087}
   destroyTime: 25
 --- !u!1 &3332640559271079085
 GameObject:

@@ -16,6 +16,7 @@ namespace ClickUpAdventurers
         [Tooltip("The starting angle, when accuracy is lowest")]
         public float minAccuracyAngle = 45.0f;
         public float shootCooldownTime = 0.5f;
+        public int damage;
 
         private float accuracyAngle;    //Current accuracy angle
         private float lastAttackTime;
@@ -85,6 +86,7 @@ namespace ClickUpAdventurers
                 //If the cooldown has passed, then shoot
                 Transform clone = Instantiate(arrowPrefab).GetComponent<Transform>();
                 clone.position = firePoint.position;
+                clone.GetComponent<Arrow>().damage = damage;
 
                 float randomRot = Random.Range(-accuracyAngle, accuracyAngle);
 

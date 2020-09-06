@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_ClickUpAdventurers/Scenes/BattleScene.unity
     guid: bcf040429cfc9b141b34b48562ad6e73
+  - enabled: 1
+    path: Assets/_ClickUpAdventurers/Scenes/ItemShop.unity
+    guid: 8a48a050a2c642a47834a30946c64b37
   m_configObjects: {}

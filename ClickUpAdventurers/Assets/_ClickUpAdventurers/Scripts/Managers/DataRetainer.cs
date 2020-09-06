@@ -4,6 +4,22 @@ using UnityEngine;
 
 namespace ClickUpAdventurers
 {
+    [System.Serializable]
+    public enum PlayerTypes
+    {
+        None,
+        Archer,
+        Mage,
+        Looter,
+        Warrior
+    };
+
+    [System.Serializable]
+    public class PlayerItems
+    {
+        public ItemScriptableObj[] items;
+    };
+
     // Responsible for holding data throughout the game and to manage calls to the DataSaver
     public class DataRetainer : MonoBehaviour
     {
@@ -97,14 +113,20 @@ namespace ClickUpAdventurers
 
         #endregion
 
-        public int warriorMaxHP = 100;
+        [Tooltip("Is indexed by the PlayerTypes enum: 0 - Archer, 1 - Mage, 2 - Looter, 3 - Warrior")]
+        public PlayerItems[] playerItems;
 
+        [Space]
+        public int warriorMaxHP = 100;
         public QuestScriptableObj[] allQuests;
 
         private DataSaver dataSaver;
 
         private void LoadStartingData()
         {
+            ItemScriptableObj warriorHpItem = GetItem(PlayerTypes.Warrior, ItemEffect.Health);
+            warriorMaxHP = (int)(warriorMaxHP * warriorHpItem.multiplier);
+
             money = dataSaver.LoadInt("money");
             if (warrior1HP == dataSaver.intDefault)
                 Warrior1HP = 0;
@@ -126,6 +148,23 @@ namespace ClickUpAdventurers
         public void SaveModifiedData()
         {
             dataSaver.SaveModifiedData();
+        }
+
+        public ItemScriptableObj GetItem(PlayerTypes player, ItemEffect effect)
+        {
+            PlayerItems items = GetPlayerItems(player);
+            foreach (ItemScriptableObj item in items.items)
+                if (item.effect == effect)
+                    return item;
+            return null;
+        }
+
+        public PlayerItems GetPlayerItems(PlayerTypes player)
+        {
+            if (player == PlayerTypes.None)
+                return null;
+
+            return playerItems[(int)player - 1];
         }
     }
 }

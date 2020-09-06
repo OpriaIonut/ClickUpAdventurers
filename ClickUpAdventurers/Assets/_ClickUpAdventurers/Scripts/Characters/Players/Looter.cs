@@ -10,7 +10,7 @@ namespace ClickUpAdventurers
     {
         public float gatherTime = 1.0f; //The time it takes to gather 1 loot
         public int capacity = 5;        //The maximum capacity, once reached he will return to the party
-        public int movementSpeed = 5;
+        public float movementSpeed = 5;
         public int health = 3;
 
         public Image healthbar;

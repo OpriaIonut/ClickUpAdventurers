@@ -67,10 +67,6 @@ namespace ClickUpAdventurers
             Warrior[] warriors = FindObjectsOfType<Warrior>();
             DataRetainer dataRetainer = DataRetainer.instance;
 
-            //Set the starting hp of the warriors.
-            warriors[0].TakeDamage(warriors[0].health - dataRetainer.Warrior1HP);
-            warriors[1].TakeDamage(warriors[1].health - dataRetainer.Warrior2HP);
-
             GatheredLoot = 0;
         }
 
@@ -90,7 +86,7 @@ namespace ClickUpAdventurers
             Warrior[] warriors = FindObjectsOfType<Warrior>();
             int averageHealth = 0;
             foreach (Warrior item in warriors)
-                averageHealth += item.health;
+                averageHealth += item.Health;
             averageHealth /= warriors.Length; //Gives the average health in a 0-100 range
 
             int stars = 0;
@@ -114,9 +110,9 @@ namespace ClickUpAdventurers
             dataRetainer.Warrior1HP = 0;
             dataRetainer.Warrior2HP = 0;
             if (warriors.Length > 0)
-                dataRetainer.Warrior1HP = warriors[0].health;
+                dataRetainer.Warrior1HP = warriors[0].Health;
             if (warriors.Length > 1)
-                dataRetainer.Warrior2HP = warriors[1].health;
+                dataRetainer.Warrior2HP = warriors[1].Health;
 
             if(wonMission)
             {
