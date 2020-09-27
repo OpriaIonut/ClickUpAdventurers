@@ -15,6 +15,7 @@ MonoBehaviour:
   itemName: Steel Bow
   player: 1
   effect: 3
+  itemLevel: 2
   multiplier: 3
   price: 0
   effectName: Accuracy

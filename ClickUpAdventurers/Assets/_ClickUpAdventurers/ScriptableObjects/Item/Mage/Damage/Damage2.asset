@@ -15,6 +15,7 @@ MonoBehaviour:
   itemName: Iron Staff
   player: 2
   effect: 1
+  itemLevel: 1
   multiplier: 2
   price: 0
   effectName: Damage

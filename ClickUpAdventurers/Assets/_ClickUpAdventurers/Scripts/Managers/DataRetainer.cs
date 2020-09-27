@@ -39,6 +39,9 @@ namespace ClickUpAdventurers
 
             questStars = new Dictionary<string, int>();
             dataSaver = GetComponent<DataSaver>();
+            equipRetainter = GetComponent<EquipmentRetainer>();
+
+            equipRetainter.Init();
             LoadStartingData();
         }
 
@@ -113,18 +116,45 @@ namespace ClickUpAdventurers
 
         #endregion
 
-        [Tooltip("Is indexed by the PlayerTypes enum: 0 - Archer, 1 - Mage, 2 - Looter, 3 - Warrior")]
-        public PlayerItems[] playerItems;
-
         [Space]
         public int warriorMaxHP = 100;
         public QuestScriptableObj[] allQuests;
 
+        private EquipmentRetainer equipRetainter;
         private DataSaver dataSaver;
+
+        /// <summary>
+        /// Use (int)PlayerTypes - 1 for indexing
+        /// </summary>
+        private ItemEffect[,] playerEffects = new ItemEffect[4, 3]
+        {
+            { ItemEffect.AccuracyTime,  ItemEffect.Cooldown,    ItemEffect.Damage },
+            { ItemEffect.Size,          ItemEffect.Cooldown,    ItemEffect.Damage },
+            { ItemEffect.Size,          ItemEffect.Cooldown,    ItemEffect.Health },
+            { ItemEffect.Cooldown,      ItemEffect.Health,      ItemEffect.HealthRecovery }
+        };
+        public string[,] effectNames;
+
+        private void Start()
+        {
+            effectNames = new string[4, 3];
+            for(int index = 0; index < 4; index++)
+            {
+                for(int index2 = 0; index2 < 3; index2++)
+                {
+                    PlayerTypes playerIndex = (PlayerTypes)(index + 1);
+                    effectNames[index, index2] = equipRetainter.GetItem(playerIndex, playerEffects[index, index2], 0).effectName;
+                }
+            }
+        }
 
         private void LoadStartingData()
         {
-            ItemScriptableObj warriorHpItem = GetItem(PlayerTypes.Warrior, ItemEffect.Health);
+            //dataSaver.ResetSavedData();
+            Money = 1;
+            LoadEquippedItems();
+
+            ItemScriptableObj warriorHpItem = GetEquippedItem(PlayerTypes.Warrior, ItemEffect.Health);
             warriorMaxHP = (int)(warriorMaxHP * warriorHpItem.multiplier);
 
             money = dataSaver.LoadInt("money");
@@ -150,21 +180,78 @@ namespace ClickUpAdventurers
             dataSaver.SaveModifiedData();
         }
 
-        public ItemScriptableObj GetItem(PlayerTypes player, ItemEffect effect)
+        public void BuyItem(PlayerTypes player, int effectIndex, int itemLevel)
         {
-            PlayerItems items = GetPlayerItems(player);
-            foreach (ItemScriptableObj item in items.items)
-                if (item.effect == effect)
-                    return item;
-            return null;
+            int playerIndex = (int)player - 1;
+            int effectId = (int)playerEffects[playerIndex, effectIndex];
+            string key = "bought" + playerIndex.ToString() + effectId.ToString();
+            string alreadyBought = dataSaver.LoadString(key);
+            if (alreadyBought == dataSaver.stringDefault)
+                alreadyBought = "";
+            alreadyBought += itemLevel;
+            dataSaver.SetSaveData(key, alreadyBought);
         }
 
-        public PlayerItems GetPlayerItems(PlayerTypes player)
+        public string CheckBoughtItem(PlayerTypes player, int effectIndex)
         {
-            if (player == PlayerTypes.None)
-                return null;
+            int playerIndex = (int)player - 1;
+            int effectId = (int)playerEffects[playerIndex, effectIndex];
+            string key = "bought" + playerIndex.ToString() + effectId.ToString();
+            return dataSaver.LoadString(key);
+        }
 
-            return playerItems[(int)player - 1];
+        public ItemScriptableObj GetEquippedItem(PlayerTypes player, ItemEffect effect)
+        {
+            return equipRetainter.GetEquippedItem(player, effect);
+        }
+
+        public ItemScriptableObj GetEquippedItem(PlayerTypes player, int effectIndex)
+        {
+            int playerIndex = (int)player - 1;
+            return equipRetainter.GetEquippedItem(player, playerEffects[playerIndex, effectIndex]);
+        }
+
+        public ItemScriptableObj GetItem(PlayerTypes player, int effectIndex, int itemLevel)
+        {
+            int playerIndex = (int)player - 1;
+            return equipRetainter.GetItem(player, playerEffects[playerIndex, effectIndex], itemLevel);
+        }
+
+        public void EquipItem(PlayerTypes player, ItemEffect effect, int itemLevel)
+        {
+            int playerIndex = (int)player - 1;
+            equipRetainter.SetEquippedItem(player, effect, itemLevel);
+            string saveKey = playerIndex.ToString() + ((int)effect).ToString();
+            dataSaver.SetSaveData(saveKey, itemLevel);
+        }
+
+        public void EquipItem(PlayerTypes player, int effectIndex, int itemLevel)
+        {
+            int playerIndex = (int)player - 1;
+            equipRetainter.SetEquippedItem(player, playerEffects[playerIndex, effectIndex], itemLevel);
+            string saveKey = playerIndex.ToString() + ((int)playerEffects[playerIndex, effectIndex]).ToString();
+            dataSaver.SetSaveData(saveKey, itemLevel);
+        }
+
+        public void LoadEquippedItems()
+        {
+            for(int playerIndex = 0; playerIndex < 4; playerIndex++)
+            {
+                for(int effectIndex = 0; effectIndex < 3; effectIndex++)
+                {
+                    string key = playerIndex.ToString() + ((int)playerEffects[playerIndex, effectIndex]).ToString();
+                    int result = dataSaver.LoadInt(key);
+
+                    PlayerTypes playerType = (PlayerTypes)(playerIndex + 1);
+                    if (result == dataSaver.intDefault)
+                    {
+                        EquipItem(playerType, playerEffects[playerIndex, effectIndex], 0);
+                        BuyItem(playerType, effectIndex, 0);
+                    }
+                    else
+                        EquipItem(playerType, playerEffects[playerIndex, effectIndex], result);
+                }
+            }
         }
     }
 }

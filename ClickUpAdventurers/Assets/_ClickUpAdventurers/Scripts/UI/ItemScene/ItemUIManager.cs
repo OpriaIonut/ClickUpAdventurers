@@ -7,12 +7,6 @@ namespace ClickUpAdventurers
 {
     public class ItemUIManager : MonoBehaviour
     {
-        [System.Serializable]
-        public struct UiItems
-        {
-            public PlayerItems[] playerItems;
-        };
-
         [Header("UI references")]
         public GameObject contentPanel;
         public GameObject footerPanel;
@@ -26,13 +20,11 @@ namespace ClickUpAdventurers
         public TextMeshProUGUI confirmHeader;
         public TextMeshProUGUI confirmContent;
 
-        public List<ItemScriptableObj> allItems;
-
-        private int selectedItemType;
-        private int selectedItemIndex;
+        private PlayerTypes selectedPlayer;
+        private int selectedEffectIndex;
+        private int selectedItemLevel;
         private bool selectedConfirmMenu;
 
-        private UiItems[] uiItems;
         private ItemScriptableObj selectedItem;
         private DataRetainer dataRetainer;
 
@@ -45,60 +37,6 @@ namespace ClickUpAdventurers
             confirmationMenu.SetActive(false);
             buyButton.SetActive(false);
             equipButton.SetActive(false);
-
-            SortUiItems();
-        }
-
-        private void SortUiItems()
-        {
-            int playerCount = 4;
-
-            uiItems = new UiItems[playerCount];
-            //For all players
-            for(int playerIndex = 0; playerIndex < playerCount; playerIndex++)
-            {
-                //0 - None type so we need to add 1 to get the actual player
-                PlayerTypes playerType = (PlayerTypes)(playerIndex + 1);
-                PlayerItems playerItems = dataRetainer.GetPlayerItems(playerType);
-
-                uiItems[playerIndex].playerItems = new PlayerItems[3];
-                //For each item effect that the player can have
-                for (int itemIndex = 0; itemIndex < playerItems.items.Length; itemIndex++)
-                {
-                    uiItems[playerIndex].playerItems[itemIndex] = new PlayerItems();
-                    //Find the items that can be equiped by the current player and has the desired effect
-                    ItemEffect effect = playerItems.items[itemIndex].effect;
-                    List<ItemScriptableObj> foundItems = new List<ItemScriptableObj>();
-                    for(int allItemsIndex = 0; allItemsIndex < allItems.Count; allItemsIndex++)
-                    {
-                        if(allItems[allItemsIndex].effect == effect && allItems[allItemsIndex].player == playerType)
-                        {
-                            foundItems.Add(allItems[allItemsIndex]);
-                            allItems.RemoveAt(allItemsIndex);
-                            allItemsIndex--;
-                        }
-                    }
-                    //Sort the items to be in ascending order based on multipliers
-                    ItemScriptableObj[] itemsToPlace = new ItemScriptableObj[foundItems.Count];
-                    for(int itemsToPlaceIndex = 0; itemsToPlaceIndex < itemsToPlace.Length; itemsToPlaceIndex++)
-                    {
-                        ItemScriptableObj min = foundItems[0];
-                        int minIndex = 0;
-                        for(int foundItemsIndex = 1; foundItemsIndex < foundItems.Count; foundItemsIndex++)
-                        {
-                            if (foundItems[foundItemsIndex].multiplier < min.multiplier)
-                            {
-                                min = foundItems[foundItemsIndex];
-                                minIndex = foundItemsIndex;
-                            }
-                        }
-                        itemsToPlace[itemsToPlaceIndex] = min;
-                        foundItems.RemoveAt(minIndex);
-                    }
-                    //Add them to the uiItems
-                    uiItems[playerIndex].playerItems[itemIndex].items = itemsToPlace;
-                }
-            }
         }
 
         #region OnClick events
@@ -112,7 +50,7 @@ namespace ClickUpAdventurers
                 return;
 
             confirmationMenu.SetActive(true);
-            confirmContent.text = selectedItem.itemName + "\n\n" + itemNames[selectedItemType].text + ": x" + selectedItem.multiplier + "\nPrice: $" + selectedItem.price;
+            confirmContent.text = selectedItem.itemName + "\n\n" + itemNames[selectedEffectIndex].text + ": x" + selectedItem.multiplier + "\nPrice: $" + selectedItem.price;
             selectedConfirmMenu = true;
         }
 
@@ -122,6 +60,7 @@ namespace ClickUpAdventurers
                 return;
 
             EquipItem();
+            dataRetainer.SaveModifiedData();
         }
 
         public void ConfirmBuyButtonClickEvent()
@@ -130,9 +69,12 @@ namespace ClickUpAdventurers
             selectedConfirmMenu = false;
 
             dataRetainer.Money -= selectedItem.price;
-            //To do: save to the disk the fact that you bought the item
+            dataRetainer.BuyItem(selectedPlayer, selectedEffectIndex, selectedItemLevel);
             EquipItem();
             dataRetainer.SaveModifiedData();
+
+            equipButton.SetActive(true);
+            buyButton.SetActive(false);
         }
 
         public void ConfirmCancelButtonClickEvent()
@@ -156,25 +98,36 @@ namespace ClickUpAdventurers
 
         public void SelectPlayerItemList(int itemListIndex)
         {
-            selectedItemType = itemListIndex;
+            selectedEffectIndex = itemListIndex;
         }
 
         public void SelectItemIndex(int itemIndex)
         {
-            selectedItemIndex = itemIndex;
+            selectedItemLevel = itemIndex;
         }
 
         #endregion
 
         public void ApplyItemSelection()
         {
-            selectedItem = uiItems[selectedPlayer].playerItems[selectedItemType].items[selectedItemIndex];
+            selectedItem = dataRetainer.GetItem(selectedPlayer, selectedEffectIndex, selectedItemLevel);
             if (selectedItem != null)
             {
-                itemDescription.text = selectedItem.itemName + "\n\n" + itemNames[selectedItemType].text + ": x" + selectedItem.multiplier + "\n\nPrice: $" + selectedItem.price;
+                itemDescription.text = selectedItem.itemName + "\n\n" + itemNames[selectedEffectIndex].text + ": x" + selectedItem.multiplier + "\n\nPrice: $" + selectedItem.price;
 
-                //To do: check to see if it is already bought
-                buyButton.SetActive(true);
+                string boughtStr = dataRetainer.CheckBoughtItem(selectedPlayer, selectedEffectIndex);
+
+                string strSearch = selectedItemLevel.ToString();
+                if (boughtStr.Contains(strSearch))
+                {
+                    equipButton.SetActive(true);
+                    buyButton.SetActive(false);
+                }
+                else
+                {
+                    equipButton.SetActive(false);
+                    buyButton.SetActive(true);
+                }
             }
             else
             {
@@ -186,23 +139,23 @@ namespace ClickUpAdventurers
 
         private void EquipItem()
         {
-            dataRetainer.playerItems[selectedPlayer].items[selectedItemType] = uiItems[selectedPlayer].playerItems[selectedItemType].items[selectedItemIndex];
+            dataRetainer.EquipItem(selectedPlayer, selectedEffectIndex, selectedItemLevel);
         }
 
-        private int selectedPlayer;
         public void SelectPlayer(int player)
         {
             if (selectedConfirmMenu)
                 return;
 
-            selectedPlayer = player;
+            selectedPlayer = (PlayerTypes)(player + 1);
             contentPanel.SetActive(true);
             footerPanel.SetActive(true);
             itemDescription.text = "";
 
-            itemNames[0].text = uiItems[player].playerItems[0].items[0].effectName;
-            itemNames[1].text = uiItems[player].playerItems[1].items[0].effectName;
-            itemNames[2].text = uiItems[player].playerItems[2].items[0].effectName;
+            int playerIndex = player;
+            itemNames[0].text = dataRetainer.effectNames[playerIndex, 0];
+            itemNames[1].text = dataRetainer.effectNames[playerIndex, 1];
+            itemNames[2].text = dataRetainer.effectNames[playerIndex, 2];
         }
     }
 }

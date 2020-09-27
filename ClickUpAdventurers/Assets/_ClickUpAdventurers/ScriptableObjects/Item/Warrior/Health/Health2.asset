@@ -15,6 +15,7 @@ MonoBehaviour:
   itemName: Iron Armour
   player: 4
   effect: 5
+  itemLevel: 1
   multiplier: 2
   price: 0
   effectName: Health

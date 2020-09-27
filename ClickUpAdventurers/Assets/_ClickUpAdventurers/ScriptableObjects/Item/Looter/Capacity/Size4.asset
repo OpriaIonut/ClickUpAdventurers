@@ -15,6 +15,7 @@ MonoBehaviour:
   itemName: Dragon Scale Bag
   player: 3
   effect: 4
+  itemLevel: 3
   multiplier: 4
   price: 0
   effectName: Bag Size

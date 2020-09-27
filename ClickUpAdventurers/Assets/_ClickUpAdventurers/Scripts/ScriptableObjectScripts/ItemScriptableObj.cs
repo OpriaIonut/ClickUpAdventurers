@@ -21,6 +21,7 @@ namespace ClickUpAdventurers
         public string itemName;
         public PlayerTypes player;
         public ItemEffect effect;
+        public int itemLevel;
         public float multiplier;
         public int price;
 

@@ -15,6 +15,7 @@ MonoBehaviour:
   itemName: Diamond Staff
   player: 2
   effect: 1
+  itemLevel: 3
   multiplier: 8
   price: 0
   effectName: Damage

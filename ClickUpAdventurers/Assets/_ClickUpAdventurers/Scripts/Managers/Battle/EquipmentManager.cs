@@ -16,34 +16,34 @@ namespace ClickUpAdventurers
         {
             DataRetainer dataRetainer = DataRetainer.instance;
 
-            ItemScriptableObj item1 = dataRetainer.GetItem(PlayerTypes.Archer, ItemEffect.Damage);
-            ItemScriptableObj item2 = dataRetainer.GetItem(PlayerTypes.Archer, ItemEffect.Cooldown);
-            ItemScriptableObj item3 = dataRetainer.GetItem(PlayerTypes.Archer, ItemEffect.AccuracyTime);
+            ItemScriptableObj item1 = dataRetainer.GetEquippedItem(PlayerTypes.Archer, ItemEffect.Damage);
+            ItemScriptableObj item2 = dataRetainer.GetEquippedItem(PlayerTypes.Archer, ItemEffect.Cooldown);
+            ItemScriptableObj item3 = dataRetainer.GetEquippedItem(PlayerTypes.Archer, ItemEffect.AccuracyTime);
 
             archer.damage = (int)(archer.damage * item1.multiplier);
             archer.shootCooldownTime = archer.shootCooldownTime / item2.multiplier;
             archer.accuracyMaxTime = archer.accuracyMaxTime / item3.multiplier;
 
-            item1 = dataRetainer.GetItem(PlayerTypes.Mage, ItemEffect.Size);
-            item2 = dataRetainer.GetItem(PlayerTypes.Mage, ItemEffect.Cooldown);
-            item3 = dataRetainer.GetItem(PlayerTypes.Mage, ItemEffect.Damage);
+            item1 = dataRetainer.GetEquippedItem(PlayerTypes.Mage, ItemEffect.Size);
+            item2 = dataRetainer.GetEquippedItem(PlayerTypes.Mage, ItemEffect.Cooldown);
+            item3 = dataRetainer.GetEquippedItem(PlayerTypes.Mage, ItemEffect.Damage);
 
             mage.ballSizeMultiplier = mage.ballSizeMultiplier * item1.multiplier;
             mage.castTime = mage.castTime / item2.multiplier;
             mage.damage = (int)(mage.damage * item3.multiplier);
 
-            item1 = dataRetainer.GetItem(PlayerTypes.Looter, ItemEffect.Size);
-            item2 = dataRetainer.GetItem(PlayerTypes.Looter, ItemEffect.Health);
-            item3 = dataRetainer.GetItem(PlayerTypes.Looter, ItemEffect.Cooldown);
+            item1 = dataRetainer.GetEquippedItem(PlayerTypes.Looter, ItemEffect.Size);
+            item2 = dataRetainer.GetEquippedItem(PlayerTypes.Looter, ItemEffect.Health);
+            item3 = dataRetainer.GetEquippedItem(PlayerTypes.Looter, ItemEffect.Cooldown);
 
             looter.capacity = (int)(looter.capacity * item1.multiplier);
             looter.health = (int)(looter.health * item2.multiplier);
             looter.gatherTime = looter.gatherTime / item3.multiplier;
             looter.movementSpeed = looter.movementSpeed * item3.multiplier;
 
-            item1 = dataRetainer.GetItem(PlayerTypes.Warrior, ItemEffect.Cooldown);
-            item2 = dataRetainer.GetItem(PlayerTypes.Warrior, ItemEffect.Health);
-            item3 = dataRetainer.GetItem(PlayerTypes.Warrior, ItemEffect.HealthRecovery);
+            item1 = dataRetainer.GetEquippedItem(PlayerTypes.Warrior, ItemEffect.Cooldown);
+            item2 = dataRetainer.GetEquippedItem(PlayerTypes.Warrior, ItemEffect.Health);
+            item3 = dataRetainer.GetEquippedItem(PlayerTypes.Warrior, ItemEffect.HealthRecovery);
 
             if (item1.multiplier == 0)
                 warrior1.attackCooldown = 0;

@@ -15,6 +15,7 @@ MonoBehaviour:
   itemName: Dragon Armour
   player: 3
   effect: 5
+  itemLevel: 3
   multiplier: 8
   price: 0
   effectName: Health

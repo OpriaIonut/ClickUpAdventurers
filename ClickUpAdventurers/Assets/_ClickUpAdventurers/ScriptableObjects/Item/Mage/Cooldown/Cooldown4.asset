@@ -15,6 +15,7 @@ MonoBehaviour:
   itemName: Divine Book
   player: 2
   effect: 2
+  itemLevel: 3
   multiplier: 8
   price: 0
   effectName: Cast Time

@@ -15,6 +15,7 @@ MonoBehaviour:
   itemName: Sapphire Cataclyst
   player: 2
   effect: 4
+  itemLevel: 2
   multiplier: 3
   price: 0
   effectName: Magic Size

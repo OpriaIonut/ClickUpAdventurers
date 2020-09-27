@@ -7,7 +7,7 @@ namespace ClickUpAdventurers
 {
     public class SceneLoaderSpawner : MonoBehaviour
     {
-        private void Start()
+        private void Awake()
         {
             //If we don't have a scene loader
             if (SceneLoader.instance == null)
@@ -16,6 +16,10 @@ namespace ClickUpAdventurers
                 gameObject.AddComponent(typeof(SceneLoader));
                 gameObject.name = "SceneLoader";
                 Destroy(this);
+            }
+            else
+            {
+                Destroy(this.gameObject);
             }
         }
     }

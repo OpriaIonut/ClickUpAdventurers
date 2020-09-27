@@ -15,6 +15,7 @@ MonoBehaviour:
   itemName: Iron Quiver
   player: 1
   effect: 2
+  itemLevel: 1
   multiplier: 2
   price: 0
   effectName: Reload Time

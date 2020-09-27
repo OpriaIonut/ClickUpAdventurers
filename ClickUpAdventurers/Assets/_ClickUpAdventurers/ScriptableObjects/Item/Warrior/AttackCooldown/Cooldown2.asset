@@ -15,6 +15,7 @@ MonoBehaviour:
   itemName: Iron Knife
   player: 4
   effect: 2
+  itemLevel: 1
   multiplier: 1
   price: 0
   effectName: Attack Speed

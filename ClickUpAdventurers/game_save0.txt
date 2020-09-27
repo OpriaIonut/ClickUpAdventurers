@@ -1,0 +1,29 @@
+money 1
+03 1
+02 3
+01 0
+14 0
+12 0
+11 0
+24 0
+22 0
+25 0
+32 0
+35 0
+36 0
+warrior1HP 100
+warrior2HP 100
+floatList
+stringList
+bought03 013
+bought02 0213
+bought01 0
+bought14 0
+bought12 0
+bought11 0
+bought24 0
+bought22 0
+bought25 0
+bought32 0
+bought35 0
+bought36 0
