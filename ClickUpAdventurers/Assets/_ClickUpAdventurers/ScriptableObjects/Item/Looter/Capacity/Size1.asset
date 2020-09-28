@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d4fd571dbf2cf1478eb794a5a3759d5, type: 3}
   m_Name: Size1
   m_EditorClassIdentifier: 
-  itemName: Leather Bag
+  itemName: Pouch
   player: 3
   effect: 4
+  itemLevel: 0
   multiplier: 1
   price: 0
+  uiSprite: {fileID: 21300000, guid: 257e57b66248c7f4195b04bd9f5b42ff, type: 3}
   effectName: Bag Size

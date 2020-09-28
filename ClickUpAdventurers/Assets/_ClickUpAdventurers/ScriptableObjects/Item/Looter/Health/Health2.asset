@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d4fd571dbf2cf1478eb794a5a3759d5, type: 3}
   m_Name: Health2
   m_EditorClassIdentifier: 
-  itemName: Chainmail
+  itemName: Beginner Vest
   player: 3
   effect: 5
   itemLevel: 1
   multiplier: 2
   price: 0
+  uiSprite: {fileID: 21300000, guid: 8092e1267cdbcdf4fbe2f0c82a60e6a4, type: 3}
   effectName: Health

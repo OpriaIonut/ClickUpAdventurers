@@ -18,4 +18,5 @@ MonoBehaviour:
   itemLevel: 2
   multiplier: 4
   price: 0
+  uiSprite: {fileID: 21300000, guid: 4fb05f2a6417b94469cc053aef17a9b8, type: 3}
   effectName: Reload Time

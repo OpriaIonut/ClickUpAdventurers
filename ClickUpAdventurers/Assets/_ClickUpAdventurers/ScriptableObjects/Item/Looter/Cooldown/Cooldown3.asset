@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d4fd571dbf2cf1478eb794a5a3759d5, type: 3}
   m_Name: Cooldown3
   m_EditorClassIdentifier: 
-  itemName: Scale Boots
+  itemName: Steel Boots
   player: 3
   effect: 2
   itemLevel: 2
   multiplier: 4
   price: 0
+  uiSprite: {fileID: 21300000, guid: 72634761e7c6ff847b134ce32d917ac5, type: 3}
   effectName: Gather Speed

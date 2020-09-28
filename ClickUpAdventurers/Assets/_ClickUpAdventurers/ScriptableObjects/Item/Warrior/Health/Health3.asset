@@ -18,4 +18,5 @@ MonoBehaviour:
   itemLevel: 2
   multiplier: 4
   price: 0
+  uiSprite: {fileID: 21300000, guid: ca41f5fe058eb59488a0a70b7efd0c38, type: 3}
   effectName: Health

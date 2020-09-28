@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d4fd571dbf2cf1478eb794a5a3759d5, type: 3}
   m_Name: Health1
   m_EditorClassIdentifier: 
-  itemName: Leather Armour
+  itemName: Rag Clothes
   player: 3
   effect: 5
+  itemLevel: 0
   multiplier: 1
   price: 0
+  uiSprite: {fileID: 21300000, guid: 4c8b75fb0847a59429e1d2618c8e65de, type: 3}
   effectName: Health

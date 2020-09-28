@@ -18,4 +18,5 @@ MonoBehaviour:
   itemLevel: 2
   multiplier: 3
   price: 0
+  uiSprite: {fileID: 21300000, guid: 7d85ad1005186c947a18d9a34b34df18, type: 3}
   effectName: Accuracy

@@ -15,6 +15,8 @@ MonoBehaviour:
   itemName: Beginner Book
   player: 2
   effect: 2
+  itemLevel: 0
   multiplier: 1
   price: 0
+  uiSprite: {fileID: 21300000, guid: daa01e6ad440df5408fc94b39231a25a, type: 3}
   effectName: Cast Time

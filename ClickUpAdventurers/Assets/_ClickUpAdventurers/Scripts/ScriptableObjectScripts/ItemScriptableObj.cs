@@ -24,6 +24,7 @@ namespace ClickUpAdventurers
         public int itemLevel;
         public float multiplier;
         public int price;
+        public Sprite uiSprite;
 
         /// <summary>
         /// Name displayed on the UI, the enum can't be used for this because it is more general

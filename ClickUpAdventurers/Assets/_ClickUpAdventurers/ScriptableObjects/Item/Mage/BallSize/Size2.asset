@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d4fd571dbf2cf1478eb794a5a3759d5, type: 3}
   m_Name: Size2
   m_EditorClassIdentifier: 
-  itemName: Amethyst Cataclyst
+  itemName: Wolf Pelt Cloak
   player: 2
   effect: 4
   itemLevel: 1
   multiplier: 2
   price: 0
+  uiSprite: {fileID: 21300000, guid: 166e08ffa327d5642a9899cbe93c82c9, type: 3}
   effectName: Magic Size

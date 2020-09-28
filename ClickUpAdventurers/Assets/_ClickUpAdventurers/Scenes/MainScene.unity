@@ -1389,6 +1389,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2a5cc121131d4b4fa198776d075f179, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  savePath: game_save0.txt
   intDefault: -1
   floatDefault: -1
   stringDefault: defaultStr

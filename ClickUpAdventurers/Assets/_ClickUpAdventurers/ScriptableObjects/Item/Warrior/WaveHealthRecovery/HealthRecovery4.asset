@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d4fd571dbf2cf1478eb794a5a3759d5, type: 3}
   m_Name: HealthRecovery4
   m_EditorClassIdentifier: 
-  itemName: Diamond Shield
+  itemName: Mystic Shield
   player: 4
   effect: 6
   itemLevel: 3
   multiplier: 8
   price: 0
+  uiSprite: {fileID: 21300000, guid: 8f28832ddd5d9d8489caf54eefca1416, type: 3}
   effectName: Recovery

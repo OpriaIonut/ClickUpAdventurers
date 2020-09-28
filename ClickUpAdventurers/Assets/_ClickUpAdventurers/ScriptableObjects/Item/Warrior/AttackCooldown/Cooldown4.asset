@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d4fd571dbf2cf1478eb794a5a3759d5, type: 3}
   m_Name: Cooldown4
   m_EditorClassIdentifier: 
-  itemName: Diamond Knife
+  itemName: Mystic Sword
   player: 4
   effect: 2
   itemLevel: 3
   multiplier: 4
   price: 0
+  uiSprite: {fileID: 21300000, guid: a137fe6bdf6dcd842898630f1588c408, type: 3}
   effectName: Attack Speed

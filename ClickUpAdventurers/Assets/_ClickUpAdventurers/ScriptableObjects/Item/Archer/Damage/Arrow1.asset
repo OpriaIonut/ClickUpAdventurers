@@ -15,6 +15,8 @@ MonoBehaviour:
   itemName: Wooden Arrow
   player: 1
   effect: 1
+  itemLevel: 0
   multiplier: 1
   price: 0
+  uiSprite: {fileID: 21300000, guid: 9eb0eae109111fc4fa406b3480eccb9e, type: 3}
   effectName: Damage

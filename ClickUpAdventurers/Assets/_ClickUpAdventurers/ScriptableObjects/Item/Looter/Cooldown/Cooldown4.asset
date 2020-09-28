@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d4fd571dbf2cf1478eb794a5a3759d5, type: 3}
   m_Name: Cooldown4
   m_EditorClassIdentifier: 
-  itemName: Dragon Scale Boots
+  itemName: Mystic Boots
   player: 3
   effect: 2
   itemLevel: 3
   multiplier: 8
   price: 0
+  uiSprite: {fileID: 21300000, guid: 5d513e48f0264e84c8098cb0e73c13c9, type: 3}
   effectName: Gather Speed

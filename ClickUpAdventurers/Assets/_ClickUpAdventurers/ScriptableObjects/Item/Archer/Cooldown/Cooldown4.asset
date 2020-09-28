@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d4fd571dbf2cf1478eb794a5a3759d5, type: 3}
   m_Name: Cooldown4
   m_EditorClassIdentifier: 
-  itemName: Diamond Quiver
+  itemName: Mystic Quiver
   player: 1
   effect: 2
   itemLevel: 3
   multiplier: 8
   price: 0
+  uiSprite: {fileID: 21300000, guid: 0c54525570b5bd8419a0e7a722c738d4, type: 3}
   effectName: Reload Time

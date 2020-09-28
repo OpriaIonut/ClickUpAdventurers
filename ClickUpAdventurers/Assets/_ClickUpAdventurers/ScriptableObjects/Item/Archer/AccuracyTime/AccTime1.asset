@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d4fd571dbf2cf1478eb794a5a3759d5, type: 3}
   m_Name: AccTime1
   m_EditorClassIdentifier: 
-  itemName: Wooden Bow
+  itemName: Twig Bow
   player: 1
   effect: 3
+  itemLevel: 0
   multiplier: 1
   price: 0
+  uiSprite: {fileID: 21300000, guid: b70398211bc60854abc119ce531da974, type: 3}
   effectName: Accuracy

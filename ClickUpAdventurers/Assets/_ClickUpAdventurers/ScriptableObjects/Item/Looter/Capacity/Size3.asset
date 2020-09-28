@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d4fd571dbf2cf1478eb794a5a3759d5, type: 3}
   m_Name: Size3
   m_EditorClassIdentifier: 
-  itemName: Scale Bag
+  itemName: Bag
   player: 3
   effect: 4
   itemLevel: 2
   multiplier: 3
   price: 0
+  uiSprite: {fileID: 21300000, guid: bfe58725c90c458449d95a60ea6d69e7, type: 3}
   effectName: Bag Size

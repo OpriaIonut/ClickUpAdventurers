@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d4fd571dbf2cf1478eb794a5a3759d5, type: 3}
   m_Name: Cooldown1
   m_EditorClassIdentifier: 
-  itemName: Bronze Knife
+  itemName: Beginner Sword
   player: 4
   effect: 2
+  itemLevel: 0
   multiplier: 0
   price: 0
+  uiSprite: {fileID: 21300000, guid: 345b093fa747daf46828c06f5100a151, type: 3}
   effectName: Attack Speed

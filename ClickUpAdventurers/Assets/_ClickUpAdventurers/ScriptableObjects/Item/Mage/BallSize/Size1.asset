@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d4fd571dbf2cf1478eb794a5a3759d5, type: 3}
   m_Name: Size1
   m_EditorClassIdentifier: 
-  itemName: Amber Cataclyst
+  itemName: Beginner Cloak
   player: 2
   effect: 4
+  itemLevel: 0
   multiplier: 1
   price: 0
+  uiSprite: {fileID: 21300000, guid: 816d3c9e9b1b44045b71945f9301ffda, type: 3}
   effectName: Magic Size

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 namespace ClickUpAdventurers
 {
@@ -11,6 +12,7 @@ namespace ClickUpAdventurers
         public GameObject contentPanel;
         public GameObject footerPanel;
         public TextMeshProUGUI[] itemNames;
+        public Image selectedItemImage;
         public TextMeshProUGUI itemDescription;
         public GameObject buyButton;
         public GameObject equipButton;
@@ -37,6 +39,8 @@ namespace ClickUpAdventurers
             confirmationMenu.SetActive(false);
             buyButton.SetActive(false);
             equipButton.SetActive(false);
+
+            selectedItemImage.enabled = false;
         }
 
         #region OnClick events
@@ -114,6 +118,8 @@ namespace ClickUpAdventurers
             if (selectedItem != null)
             {
                 itemDescription.text = selectedItem.itemName + "\n\n" + itemNames[selectedEffectIndex].text + ": x" + selectedItem.multiplier + "\n\nPrice: $" + selectedItem.price;
+                selectedItemImage.enabled = true;
+                selectedItemImage.sprite = selectedItem.uiSprite;
 
                 string boughtStr = dataRetainer.CheckBoughtItem(selectedPlayer, selectedEffectIndex);
 
@@ -134,6 +140,7 @@ namespace ClickUpAdventurers
                 itemDescription.text = "";
                 buyButton.SetActive(false);
                 equipButton.SetActive(false);
+                selectedItemImage.enabled = false;
             }
         }
 

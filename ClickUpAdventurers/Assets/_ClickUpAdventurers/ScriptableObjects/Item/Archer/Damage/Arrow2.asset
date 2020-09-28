@@ -18,4 +18,5 @@ MonoBehaviour:
   itemLevel: 1
   multiplier: 2
   price: 0
+  uiSprite: {fileID: 21300000, guid: ba414ee05fcca5047b2fbba29df25a31, type: 3}
   effectName: Damage
