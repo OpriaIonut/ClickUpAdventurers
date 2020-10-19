@@ -34,21 +34,16 @@ namespace ClickUpAdventurers
                 if (value > maxHealth)
                     health = maxHealth;
                 healthText.text = "" + health + " / " + maxHealth;
-                healthbar.rectTransform.localScale = new Vector3(1 - (maxHealth - health) / maxHealth, 1, 1);
+                healthbar.rectTransform.localScale = new Vector3((float)health / maxHealth, 1, 1);
             }
         }
 
         public int maxHealth;
-        private float healthbarInitVal = 1;
         private float lastAttackTime = 0;
 
         private void Start()
         {
             InheritedStartCalls();
-
-            maxHealth = health;
-            healthbarInitVal = healthbar.rectTransform.localScale.x;
-            healthbar.rectTransform.localScale = new Vector3(1 - healthbarInitVal * (maxHealth - health) / maxHealth, 1, 1);
         }
 
         private void Update()

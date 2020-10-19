@@ -16,12 +16,22 @@ namespace ClickUpAdventurers
 
         public TextMeshProUGUI moneyText;
 
+        public GameObject optionsCanvas;
+        public GameObject resetProgressConfirmCanvas;
+
+        private EquipmentRetainer equipmentRetainer;
         private DataRetainer dataRetainer;
+
+        private bool showOptionsCanvas = false;
 
         private void Start()
         {
+            equipmentRetainer = EquipmentRetainer.instance;
             dataRetainer = DataRetainer.instance;
             moneyText.text = "$" + dataRetainer.Money;
+
+            optionsCanvas.SetActive(false);
+            resetProgressConfirmCanvas.SetActive(false);
         }
 
         private void Update()
@@ -32,5 +42,32 @@ namespace ClickUpAdventurers
             healthbarText1.text = "" + dataRetainer.Warrior1HP + " / " + dataRetainer.warriorMaxHP;
             healthbarText2.text = "" + dataRetainer.Warrior2HP + " / " + dataRetainer.warriorMaxHP;
         }
+
+        #region ClickEvents
+
+        public void OnClick_ToggleOptionsCanvas()
+        {
+            showOptionsCanvas = !showOptionsCanvas;
+            optionsCanvas.SetActive(showOptionsCanvas);
+            resetProgressConfirmCanvas.SetActive(false);
+        }
+
+        public void OnClick_ResetAllProgress()
+        {
+            resetProgressConfirmCanvas.SetActive(true);
+        }
+
+        public void OnClick_ConfirmResetAllProgress()
+        {
+            dataRetainer.ResetAll();
+            resetProgressConfirmCanvas.SetActive(false);
+        }
+
+        public void OnClick_CancelResetAllProgress()
+        {
+            resetProgressConfirmCanvas.SetActive(false);
+        }
+
+        #endregion
     }
 }

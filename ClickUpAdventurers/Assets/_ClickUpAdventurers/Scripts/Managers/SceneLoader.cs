@@ -11,14 +11,14 @@ namespace ClickUpAdventurers
 
         public static SceneLoader instance;
 
-        private void Awake()
+        public void AwakeInit()
         {
             if (instance != null)
-                Destroy(this.gameObject);
+                Destroy(this);
             else
             {
                 instance = this;
-                DontDestroyOnLoad(this.gameObject);
+                DontDestroyOnLoad(this);
             }
         }
 

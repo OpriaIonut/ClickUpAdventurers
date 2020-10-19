@@ -4,22 +4,6 @@ using UnityEngine;
 
 namespace ClickUpAdventurers
 {
-    [System.Serializable]
-    public enum PlayerTypes
-    {
-        None,
-        Archer,
-        Mage,
-        Looter,
-        Warrior
-    };
-
-    [System.Serializable]
-    public class PlayerItems
-    {
-        public ItemScriptableObj[] items;
-    };
-
     // Responsible for holding data throughout the game and to manage calls to the DataSaver
     public class DataRetainer : MonoBehaviour
     {
@@ -27,21 +11,20 @@ namespace ClickUpAdventurers
 
         public static DataRetainer instance;
 
-        private void Awake()
+        public void AwakeInit()
         {
-            if (instance != null)
-                Destroy(this.gameObject);
+            if (instance != null && instance != this)
+                Destroy(this);
             else
             {
                 instance = this;
-                DontDestroyOnLoad(this.gameObject);
+                DontDestroyOnLoad(this);
             }
 
-            questStars = new Dictionary<string, int>();
+            questStars = new int[allQuests.Length];
             dataSaver = GetComponent<DataSaver>();
             equipRetainter = GetComponent<EquipmentRetainer>();
 
-            equipRetainter.Init();
             LoadStartingData();
         }
 
@@ -53,7 +36,7 @@ namespace ClickUpAdventurers
         public int Money
         {
             get { return money; }
-            set { money = value; dataSaver.SetSaveData("money", value); }
+            set { money = value; dataSaver.SaveMoney(value); }
         }
 
         private int warrior1HP;
@@ -65,7 +48,7 @@ namespace ClickUpAdventurers
                 warrior1HP = value;
                 if (warrior1HP > warriorMaxHP)
                     warrior1HP = warriorMaxHP;
-                dataSaver.SetSaveData("warrior1HP", warrior1HP); 
+                dataSaver.SaveWarriorHP(0, warrior1HP); 
             }
         }
         private int warrior2HP;
@@ -77,99 +60,78 @@ namespace ClickUpAdventurers
                 warrior2HP = value;
                 if (warrior2HP > warriorMaxHP)
                     warrior2HP = warriorMaxHP;
-                dataSaver.SetSaveData("warrior2HP", warrior2HP);
+                dataSaver.SaveWarriorHP(1, warrior2HP);
             }
         }
 
-        private Dictionary<string, int> questStars;
+        private int FindQuestIndex(string questName)
+        {
+            int questIndex = -1;
+            for (int index = 0; index < allQuests.Length; index++)
+                if (questName == allQuests[index].title)
+                {
+                    questIndex = index;
+                    break;
+                }
+
+            return questIndex;
+        }
+
+        private int[] questStars;
         public int GetQuestStars(string questName)
         {
-            if (questStars.ContainsKey(questName))
-                return questStars[questName];
-            return 0;
+            int questIndex = FindQuestIndex(questName);
+            if (questIndex == -1)
+            {
+                Debug.LogError("Could not find quest: " + questName);
+                return 0;
+            }
+            return questStars[questIndex];
         }
         public bool SaveQuestStars(string questName, int stars, out int previousStars)
         {
-            if(questStars.ContainsKey(questName))
+            int questIndex = FindQuestIndex(questName);
+            if (questIndex == -1)
             {
-                if (questStars[questName] < stars)
-                {
-                    previousStars = questStars[questName];
-                    questStars[questName] = stars;
-                    dataSaver.SetSaveData(questName, questStars[questName]);
-                    return true;
-                }
-                else
-                {
-                    previousStars = stars;
-                    return false;
-                }
-            }
-            else
-            {
-                questStars[questName] = stars;
+                Debug.LogError("Could not find quest: " + questName);
                 previousStars = 0;
-                dataSaver.SetSaveData(questName, questStars[questName]);
-                return true;
+                return false;
             }
+
+            previousStars = dataSaver.GetQuestStars(questIndex);
+            if (stars > previousStars)
+            {
+                questStars[questIndex] = stars;
+                dataSaver.SaveQuestProgress(questIndex, stars);
+            }
+            return true;
         }
 
         #endregion
 
-        [Space]
-        public int warriorMaxHP = 100;
+        public int warriorBaseHP = 100;
+        [HideInInspector] public int warriorMaxHP;
         public QuestScriptableObj[] allQuests;
 
         private EquipmentRetainer equipRetainter;
         private DataSaver dataSaver;
 
-        /// <summary>
-        /// Use (int)PlayerTypes - 1 for indexing
-        /// </summary>
-        private ItemEffect[,] playerEffects = new ItemEffect[4, 3]
-        {
-            { ItemEffect.AccuracyTime,  ItemEffect.Cooldown,    ItemEffect.Damage },
-            { ItemEffect.Size,          ItemEffect.Cooldown,    ItemEffect.Damage },
-            { ItemEffect.Size,          ItemEffect.Cooldown,    ItemEffect.Health },
-            { ItemEffect.Cooldown,      ItemEffect.Health,      ItemEffect.HealthRecovery }
-        };
-        public string[,] effectNames;
-
-        private void Start()
-        {
-            effectNames = new string[4, 3];
-            for(int index = 0; index < 4; index++)
-            {
-                for(int index2 = 0; index2 < 3; index2++)
-                {
-                    PlayerTypes playerIndex = (PlayerTypes)(index + 1);
-                    effectNames[index, index2] = equipRetainter.GetItem(playerIndex, playerEffects[index, index2], 0).effectName;
-                }
-            }
-        }
-
         private void LoadStartingData()
         {
-            //dataSaver.ResetSavedData();
-            Money = 1;
-            LoadEquippedItems();
+            equipRetainter.Init();
+            equipRetainter.LoadEquippedItems();
 
-            ItemScriptableObj warriorHpItem = GetEquippedItem(PlayerTypes.Warrior, ItemEffect.Health);
-            warriorMaxHP = (int)(warriorMaxHP * warriorHpItem.multiplier);
+            ItemScriptableObj warriorHpItem = equipRetainter.GetEquippedItem(PlayerTypes.Warrior, ItemEffect.Health);
+            warriorMaxHP = (int)(warriorBaseHP * warriorHpItem.multiplier);
 
-            money = dataSaver.LoadInt("money");
-            if (warrior1HP == dataSaver.intDefault)
-                Warrior1HP = 0;
-            warrior1HP = dataSaver.LoadInt("warrior1HP");
-            if (warrior1HP == dataSaver.intDefault)
-                Warrior1HP = warriorMaxHP;
-            warrior2HP = dataSaver.LoadInt("warrior2HP");
-            if (warrior2HP == dataSaver.intDefault)
-                Warrior2HP = warriorMaxHP;
+            money = dataSaver.GetMoney();
+            warrior1HP = dataSaver.GetWarriorHP(0);
+            warrior2HP = dataSaver.GetWarriorHP(1);
 
             foreach (QuestScriptableObj quest in allQuests)
             {
-                questStars[quest.title] = dataSaver.LoadInt(quest.title);
+                int questIndex = FindQuestIndex(quest.title);
+                questStars[questIndex] = dataSaver.GetQuestStars(questIndex);
             }
 
             dataSaver.SaveModifiedData();
@@ -180,78 +142,15 @@ namespace ClickUpAdventurers
             dataSaver.SaveModifiedData();
         }
 
-        public void BuyItem(PlayerTypes player, int effectIndex, int itemLevel)
+        public void ResetAll()
         {
-            int playerIndex = (int)player - 1;
-            int effectId = (int)playerEffects[playerIndex, effectIndex];
-            string key = "bought" + playerIndex.ToString() + effectId.ToString();
-            string alreadyBought = dataSaver.LoadString(key);
-            if (alreadyBought == dataSaver.stringDefault)
-                alreadyBought = "";
-            alreadyBought += itemLevel;
-            dataSaver.SetSaveData(key, alreadyBought);
-        }
+            equipRetainter.ResetAll();
+            dataSaver.ResetSavedData();
 
-        public string CheckBoughtItem(PlayerTypes player, int effectIndex)
-        {
-            int playerIndex = (int)player - 1;
-            int effectId = (int)playerEffects[playerIndex, effectIndex];
-            string key = "bought" + playerIndex.ToString() + effectId.ToString();
-            return dataSaver.LoadString(key);
-        }
-
-        public ItemScriptableObj GetEquippedItem(PlayerTypes player, ItemEffect effect)
-        {
-            return equipRetainter.GetEquippedItem(player, effect);
-        }
-
-        public ItemScriptableObj GetEquippedItem(PlayerTypes player, int effectIndex)
-        {
-            int playerIndex = (int)player - 1;
-            return equipRetainter.GetEquippedItem(player, playerEffects[playerIndex, effectIndex]);
-        }
-
-        public ItemScriptableObj GetItem(PlayerTypes player, int effectIndex, int itemLevel)
-        {
-            int playerIndex = (int)player - 1;
-            return equipRetainter.GetItem(player, playerEffects[playerIndex, effectIndex], itemLevel);
-        }
-
-        public void EquipItem(PlayerTypes player, ItemEffect effect, int itemLevel)
-        {
-            int playerIndex = (int)player - 1;
-            equipRetainter.SetEquippedItem(player, effect, itemLevel);
-            string saveKey = playerIndex.ToString() + ((int)effect).ToString();
-            dataSaver.SetSaveData(saveKey, itemLevel);
-        }
-
-        public void EquipItem(PlayerTypes player, int effectIndex, int itemLevel)
-        {
-            int playerIndex = (int)player - 1;
-            equipRetainter.SetEquippedItem(player, playerEffects[playerIndex, effectIndex], itemLevel);
-            string saveKey = playerIndex.ToString() + ((int)playerEffects[playerIndex, effectIndex]).ToString();
-            dataSaver.SetSaveData(saveKey, itemLevel);
-        }
-
-        public void LoadEquippedItems()
-        {
-            for(int playerIndex = 0; playerIndex < 4; playerIndex++)
-            {
-                for(int effectIndex = 0; effectIndex < 3; effectIndex++)
-                {
-                    string key = playerIndex.ToString() + ((int)playerEffects[playerIndex, effectIndex]).ToString();
-                    int result = dataSaver.LoadInt(key);
-
-                    PlayerTypes playerType = (PlayerTypes)(playerIndex + 1);
-                    if (result == dataSaver.intDefault)
-                    {
-                        EquipItem(playerType, playerEffects[playerIndex, effectIndex], 0);
-                        BuyItem(playerType, effectIndex, 0);
-                    }
-                    else
-                        EquipItem(playerType, playerEffects[playerIndex, effectIndex], result);
-                }
-            }
+            Money = 0;
+            Warrior1HP = warriorMaxHP;
+            Warrior2HP = warriorMaxHP;
+            questStars = new int[allQuests.Length];
         }
     }
 }

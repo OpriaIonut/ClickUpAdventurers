@@ -1,0 +1,21 @@
+money 182
+warrior1HP 224
+warrior2HP 224
+12 1
+03 0
+02 0
+01 0
+14 0
+11 0
+24 0
+22 0
+25 0
+32 0
+35 2
+36 0
+First_Encounter 2
+Act_fast 3
+floatList
+stringList
+bought35 1032
+bought12 1

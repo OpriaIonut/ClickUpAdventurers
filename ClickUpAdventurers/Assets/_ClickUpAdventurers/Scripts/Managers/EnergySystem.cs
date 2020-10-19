@@ -19,13 +19,13 @@ namespace ClickUpAdventurers
         private void Start()
         {
             dataRetainer = DataRetainer.instance;
-            recoveryRate = dataRetainer.warriorMaxHP * 2.0f / timeToFullRecharge;
         }
 
         private void FixedUpdate()
         {
             if(dataRetainer.Warrior1HP != dataRetainer.warriorMaxHP || dataRetainer.Warrior2HP != dataRetainer.warriorMaxHP)
             {
+                recoveryRate = dataRetainer.warriorMaxHP * 2.0f / timeToFullRecharge;
                 recoverAmmount += recoveryRate * Time.fixedDeltaTime;
                 if(recoverAmmount > recoverAmmountSteps)
                 {
@@ -41,6 +41,7 @@ namespace ClickUpAdventurers
                         dataRetainer.Warrior1HP += halvedAmmount;
 
                     recoverAmmount -= 2 * halvedAmmount;
+                    dataRetainer.SaveModifiedData();
                 }
             }
         }

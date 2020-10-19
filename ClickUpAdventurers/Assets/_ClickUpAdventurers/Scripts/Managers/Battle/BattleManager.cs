@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using System;
+using System.Security.Principal;
 
 namespace ClickUpAdventurers
 {
@@ -63,21 +65,17 @@ namespace ClickUpAdventurers
         private void Start()
         {
             uiManager = FindObjectOfType<UIEndMissionManager>();
-
-            Warrior[] warriors = FindObjectsOfType<Warrior>();
-            DataRetainer dataRetainer = DataRetainer.instance;
-
             GatheredLoot = 0;
         }
 
         private void Update()
         {
-            if(Input.touchCount > 0)
+            if(Input.touchCount > 0 || Input.GetMouseButtonDown(0))
             {
                 if(GameHasEnded)
                     SceneManager.LoadScene("MainScene");
                 if (GamePaused)
-                    TogglePause();
+                    DeactivatePause();
             }
         }
 
@@ -136,15 +134,17 @@ namespace ClickUpAdventurers
             SaveData(0, warriors, false);
         }
 
-        public void TogglePause()
+        public void ActivatePause()
         {
-            gamePaused = !gamePaused;
+            gamePaused = true;
+            pausedTimeStart = Time.time;
+            uiManager.DisplayPauseMenu(gamePaused);
+        }
 
-            if (gamePaused == true)
-                pausedTimeStart = Time.time;
-            else
-                pausedTimeEnd = Time.time;
-
+        public void DeactivatePause()
+        {
+            gamePaused = false;
+            pausedTimeEnd = Time.time;
             uiManager.DisplayPauseMenu(gamePaused);
         }
     }

@@ -21,9 +21,17 @@ namespace ClickUpAdventurers
         private float accuracyAngle;    //Current accuracy angle
         private float lastAttackTime;
 
+        private LineRenderer line1;
+        private LineRenderer line2;
+
         private void Start()
         {
             base.InheritedStartCalls();
+
+            line1 = firePoint.GetChild(0).GetComponent<LineRenderer>();
+            line2 = firePoint.GetChild(1).GetComponent<LineRenderer>();
+            line1.enabled = false;
+            line2.enabled = false;
 
             lastAttackTime = 0;
         }
@@ -37,6 +45,12 @@ namespace ClickUpAdventurers
                 {
                     DrawAccuracy();
                 }
+                else
+                {
+                    begunTouchTime = Time.time;
+                    line1.enabled = false;
+                    line2.enabled = false;
+                }
             }
         }
 
@@ -44,6 +58,9 @@ namespace ClickUpAdventurers
 
         private void DrawAccuracy()
         {
+            line1.enabled = true;
+            line2.enabled = true;
+
             //Get the time in which we held the tap, in a [0-1] range
             float accuracyTime = (accuracyMaxTime - (Time.time - begunTouchTime)) / accuracyMaxTime;
             //It is negative when accuracy is maxed out so we need to check for it
@@ -70,8 +87,10 @@ namespace ClickUpAdventurers
                                 targetPoint.x * -Mathf.Sin(-radAngle) + 0 + targetPoint.z * Mathf.Cos(-radAngle));
 
             //Draw the lines. To do: make an actual graphical representation
-            Debug.DrawLine(transform.position, rightPoint, Color.red);
-            Debug.DrawLine(transform.position, leftPoint, Color.red);
+            line1.SetPosition(0, firePoint.position);
+            line1.SetPosition(1, rightPoint);
+            line2.SetPosition(0, firePoint.position);
+            line2.SetPosition(1, leftPoint);
         }
 
         #endregion
@@ -95,6 +114,8 @@ namespace ClickUpAdventurers
                 clone.Rotate(Vector3.up * randomRot);
 
                 lastAttackTime = Time.time;
+                line1.enabled = false;
+                line2.enabled = false;
             }
         }
 

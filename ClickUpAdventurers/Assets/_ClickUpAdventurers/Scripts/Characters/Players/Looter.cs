@@ -162,7 +162,7 @@ namespace ClickUpAdventurers
             //Find all loot
             lootToPick = GameObject.FindGameObjectsWithTag("Loot").ToList<GameObject>();
 
-            Vector3 worldTouch = Camera.main.ScreenToWorldPoint(new Vector3(currentTouch.position.x, currentTouch.position.y, Camera.main.nearClipPlane + 5.0f));
+            Vector3 worldTouch = Camera.main.ScreenToWorldPoint(new Vector3(touchPosition.x, touchPosition.y, Camera.main.nearClipPlane + 5.0f));
 
             for (int index = 0; index < lootToPick.Count; index++)
             {

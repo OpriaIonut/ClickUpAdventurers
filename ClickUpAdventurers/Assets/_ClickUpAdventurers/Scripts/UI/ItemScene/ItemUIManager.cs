@@ -29,10 +29,13 @@ namespace ClickUpAdventurers
 
         private ItemScriptableObj selectedItem;
         private DataRetainer dataRetainer;
+        private EquipmentRetainer equipRetainer;
 
         private void Start()
         {
             dataRetainer = DataRetainer.instance;
+            equipRetainer = EquipmentRetainer.instance;
+
             contentPanel.SetActive(false);
             footerPanel.SetActive(false);
 
@@ -65,6 +68,7 @@ namespace ClickUpAdventurers
 
             EquipItem();
             dataRetainer.SaveModifiedData();
+            equipButton.SetActive(false);
         }
 
         public void ConfirmBuyButtonClickEvent()
@@ -73,11 +77,9 @@ namespace ClickUpAdventurers
             selectedConfirmMenu = false;
 
             dataRetainer.Money -= selectedItem.price;
-            dataRetainer.BuyItem(selectedPlayer, selectedEffectIndex, selectedItemLevel);
+            equipRetainer.BuyItem(selectedPlayer, selectedEffectIndex, selectedItemLevel);
             EquipItem();
             dataRetainer.SaveModifiedData();
-
-            equipButton.SetActive(true);
             buyButton.SetActive(false);
         }
 
@@ -114,25 +116,30 @@ namespace ClickUpAdventurers
 
         public void ApplyItemSelection()
         {
-            selectedItem = dataRetainer.GetItem(selectedPlayer, selectedEffectIndex, selectedItemLevel);
+            selectedItem = equipRetainer.GetItem(selectedPlayer, selectedEffectIndex, selectedItemLevel);
             if (selectedItem != null)
             {
                 itemDescription.text = selectedItem.itemName + "\n\n" + itemNames[selectedEffectIndex].text + ": x" + selectedItem.multiplier + "\n\nPrice: $" + selectedItem.price;
                 selectedItemImage.enabled = true;
                 selectedItemImage.sprite = selectedItem.uiSprite;
 
-                string boughtStr = dataRetainer.CheckBoughtItem(selectedPlayer, selectedEffectIndex);
+                string boughtStr = equipRetainer.CheckBoughtItem(selectedPlayer, selectedEffectIndex);
 
                 string strSearch = selectedItemLevel.ToString();
-                if (boughtStr.Contains(strSearch))
+                if (!boughtStr.Contains(strSearch))
+                {
+                    equipButton.SetActive(false);
+                    buyButton.SetActive(true);
+                }
+                else if(equipRetainer.GetEquippedItem(selectedPlayer, selectedEffectIndex) != selectedItem)
                 {
                     equipButton.SetActive(true);
                     buyButton.SetActive(false);
                 }
                 else
                 {
+                    buyButton.SetActive(false);
                     equipButton.SetActive(false);
-                    buyButton.SetActive(true);
                 }
             }
             else
@@ -146,7 +153,7 @@ namespace ClickUpAdventurers
 
         private void EquipItem()
         {
-            dataRetainer.EquipItem(selectedPlayer, selectedEffectIndex, selectedItemLevel);
+            equipRetainer.EquipItem(selectedPlayer, selectedEffectIndex, selectedItemLevel);
         }
 
         public void SelectPlayer(int player)
@@ -160,9 +167,16 @@ namespace ClickUpAdventurers
             itemDescription.text = "";
 
             int playerIndex = player;
-            itemNames[0].text = dataRetainer.effectNames[playerIndex, 0];
-            itemNames[1].text = dataRetainer.effectNames[playerIndex, 1];
-            itemNames[2].text = dataRetainer.effectNames[playerIndex, 2];
+            itemNames[0].text = equipRetainer.effectNames[playerIndex, 0];
+            itemNames[1].text = equipRetainer.effectNames[playerIndex, 1];
+            itemNames[2].text = equipRetainer.effectNames[playerIndex, 2];
+
+            selectedItem = null;
+            selectedEffectIndex = -1;
+            selectedItemLevel = -1;
+            selectedItemImage.enabled = false;
+            buyButton.SetActive(false);
+            equipButton.SetActive(false);
         }
     }
 }

@@ -32,7 +32,7 @@ namespace ClickUpAdventurers
                 if (currentTimeDiff >= -5)
                 {
                     //This condition represents the seconds between which to enable/disable the renderer to simulate the animation
-                    if ((currentTimeDiff >= -5 && currentTimeDiff <= -4) || (currentTimeDiff >= -3 && currentTimeDiff <= -2) || (currentTimeDiff >= -1 && currentTimeDiff <= 0))
+                    if ((currentTimeDiff >= -5 && currentTimeDiff <= -3.5) || (currentTimeDiff >= -3 && currentTimeDiff <= -1.5) || (currentTimeDiff >= -1 && currentTimeDiff <= 0))
                     {
                         gfxRenderer.enabled = true;
                     }

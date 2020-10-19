@@ -34,7 +34,7 @@ namespace ClickUpAdventurers
                 //If the game was paused add the time that it was paused in order to not mess up the formulas
                 if(resetValuesPause)
                 {
-                    castTime += BattleManager.instance.PausedTimeDiff;
+                    castingStartTime += BattleManager.instance.PausedTimeDiff;
                     resetValuesPause = false;
                 }    
 
